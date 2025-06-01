@@ -1,41 +1,51 @@
 <div th:fragment="menu">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-lg mb-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-2md mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold fs-4 text-primary" href="/">Оптичний завод</a>
+            <a class="navbar-brand fw-bold fs-4 text-primary text-center" href="/">Оптичний завод</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/products">Продукція</a>
+                <ul class="navbar-nav ms-4 me-auto mb-2 mb-lg-0 gap-4">
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/products" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Продукція</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/categories">Категорії</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/categories" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Категорії</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/materials">Матеріали</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/materials" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Матеріали</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/warehouses">Склади</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/warehouses" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Склади</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/suppliers">Постачальники</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/suppliers" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Постачальники</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/clients">Клієнти</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/clients" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Клієнти</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/employees">Співробітники</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/employees" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Співробітники</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/orders">Замовлення</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/orders" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Замовлення</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/production">Виробництво</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/production" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Виробництво</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="/shipments">Відвантаження</a>
+                    <li class="nav-item text-center border-start ps-2">
+                        <a class="nav-link text-dark fw-semibold" href="/shipments" onmouseover="this.classList.replace('text-dark', 'text-primary')"
+                        onmouseout="this.classList.replace('text-primary', 'text-dark')">Відвантаження</a>
                     </li>
                 </ul>
             </div>
