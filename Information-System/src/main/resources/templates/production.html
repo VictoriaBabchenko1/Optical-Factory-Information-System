@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Виробництво</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/menu :: menu"></div>
+<div class="container mt-5">
+    <h1 class="mb-4">Виробництво</h1>
+    <a href="/production/add" class="btn btn-primary mb-3">Додати виробництво</a>
+    <table class="table table-bordered table-striped shadow-lg">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Продукт</th>
+            <th>Дата</th>
+            <th>Співробітник</th>
+            <th>Кількість</th>
+            <th>Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="prod : ${productions}">
+            <td th:text="${prod.id}"></td>
+            <td th:text="${productNames[prod.productId]}"></td>
+            <td th:text="${prod.date}"></td>
+            <td th:text="${employeeNames[prod.employeeId]}"></td>
+            <td th:text="${prod.quantity}"></td>
+            <td>
+                <a th:href="@{'/production/edit/' + ${prod.id}}" class="btn btn-warning btn-sm">Редагувати</a>
+                <a th:href="@{'/production/delete/' + ${prod.id}}" class="btn btn-danger btn-sm">Видалити</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

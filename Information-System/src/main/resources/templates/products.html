@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список продукції</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/menu :: menu"></div>
+<div class="container mt-5">
+    <h1 class="mb-4">Список продукції</h1>
+    <a href="/products/add" class="btn btn-primary mb-3">Додати продукт</a>
+    <table class="table table-bordered table-striped shadow-lg">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Назва</th>
+            <th>Категорія</th>
+            <th>Матеріал</th>
+            <th>Ціна</th>
+            <th>Кількість</th>
+            <th>Склад</th>
+            <th>Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${categoryNames[product.categoryId]}"></td>
+            <td th:text="${materialNames[product.materialId]}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.quantity}"></td>
+            <td th:text="${product.warehouseId}"></td>
+            <td>
+                <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-warning btn-sm">Редагувати</a>
+                <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger btn-sm">Видалити</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

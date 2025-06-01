@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Відвантаження</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/menu :: menu"></div>
+<div class="container mt-5">
+    <h1 class="mb-4">Відвантаження</h1>
+    <a href="/shipments/add" class="btn btn-primary mb-3">Додати відвантаження</a>
+    <table class="table table-bordered table-striped shadow-lg">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Замовлення</th>
+            <th>Дата</th>
+            <th>Співробітник</th>
+            <th>Статус</th>
+            <th>Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="shipment : ${shipments}">
+            <td th:text="${shipment.id}"></td>
+            <td th:text="${orderNumbers[shipment.orderId]}"></td>
+            <td th:text="${shipment.date}"></td>
+            <td th:text="${employeeNames[shipment.employeeId]}"></td>
+            <td th:text="${shipment.status}"></td>
+            <td>
+                <a th:href="@{'/shipments/edit/' + ${shipment.id}}" class="btn btn-warning btn-sm">Редагувати</a>
+                <a th:href="@{'/shipments/delete/' + ${shipment.id}}" class="btn btn-danger btn-sm">Видалити</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
