@@ -5,17 +5,17 @@ INSERT INTO product_category (name, description) VALUES
 ('Мікроскопи', 'Лабораторні мікроскопи'),
 ('Телескопи', 'Астрономічні телескопи');
 
--- Матеріали
-INSERT INTO material (name, supplier_id, price, quantity) VALUES
-('Скло', 1, 100.00, 500),
-('Пластик', 2, 50.00, 1000),
-('Метал', 3, 200.00, 300);
-
 -- Постачальники
 INSERT INTO supplier (name, contact, address) VALUES
 ('ТОВ "Оптима Скло"', '+380501234567', 'м. Київ, вул. Скляна, 10'),
 ('ТОВ "Пластик Люкс"', '+380671234567', 'м. Харків, вул. Пластикова, 5'),
 ('ТОВ "Метал-Про"', '+380931234567', 'м. Дніпро, вул. Металева, 3');
+
+-- Матеріали
+INSERT INTO material (name, supplier_id, price, quantity) VALUES
+('Скло', 1, 100.00, 500),
+('Пластик', 2, 50.00, 1000),
+('Метал', 3, 200.00, 300);
 
 -- Склади
 INSERT INTO warehouse (name, address) VALUES
