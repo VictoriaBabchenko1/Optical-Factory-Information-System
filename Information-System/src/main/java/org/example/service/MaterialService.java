@@ -40,4 +40,12 @@ public class MaterialService implements IMaterialService {
     public void deleteMaterial(int id) {
         materialRepository.deleteMaterial(id);
     }
+
+    public List<java.util.Map<String, Object>> filterMaterials(String name, String supplierId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, boolean inProducts, String sort) {
+        return materialRepository.filterMaterials(name, supplierId, priceFrom, priceTo, qtyFrom, qtyTo, inProducts, sort);
+    }
+
+    public java.util.Map<String, Object> getAggregates(String name, String supplierId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, boolean inProducts) {
+        return materialRepository.getAggregates(name, supplierId, priceFrom, priceTo, qtyFrom, qtyTo, inProducts);
+    }
 } 

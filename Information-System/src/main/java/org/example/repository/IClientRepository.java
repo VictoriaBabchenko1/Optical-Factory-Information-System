@@ -9,4 +9,5 @@ public interface IClientRepository {
     List<Client> getAllClients();
     void updateClient(Client client);
     void deleteClient(int id);
+    List<java.util.Map<String, Object>> filterClients(String name, String contact, String address, boolean withProcessingOrders, boolean groupBy, String havingCount);
 } 

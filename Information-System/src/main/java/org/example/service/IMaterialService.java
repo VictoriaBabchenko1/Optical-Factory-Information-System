@@ -9,4 +9,6 @@ public interface IMaterialService {
     List<Material> getAllMaterials();
     void updateMaterial(Material material);
     void deleteMaterial(int id);
+    List<java.util.Map<String, Object>> filterMaterials(String name, String supplierId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, boolean inProducts, String sort);
+    java.util.Map<String, Object> getAggregates(String name, String supplierId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, boolean inProducts);
 } 

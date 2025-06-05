@@ -40,4 +40,8 @@ public class SupplierService implements ISupplierService {
     public void deleteSupplier(int id) {
         supplierRepository.deleteSupplier(id);
     }
+
+    public List<java.util.Map<String, Object>> filterSuppliers(String name, String contact, String address) {
+        return supplierRepository.filterSuppliers(name, contact, address);
+    }
 } 

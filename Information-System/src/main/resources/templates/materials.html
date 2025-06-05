@@ -9,10 +9,60 @@
 <div th:replace="fragments/menu :: menu"></div>
 <div class="container mt-5">
     <h1 class="mb-4">Матеріали</h1>
-    <a href="/materials/add" class="btn btn-primary mb-3">Додати матеріал</a>
+    <form class="row g-3 mb-4" method="get" action="/materials">
+        <div class="col-md-3">
+            <select class="form-select" name="name">
+                <option value="">Назва</option>
+                <option th:each="m : ${materials}" th:value="${m['name']}" th:text="${m['name']}" th:selected="${param.name} == ${m['name']}"></option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" name="supplierId">
+                <option value="">Постачальник</option>
+                <option th:each="s : ${suppliers}" th:value="${s.id}" th:text="${s.name}" th:selected="${param.supplierId} == ${s.id}"></option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="priceFrom" placeholder="Ціна від" th:value="${param.priceFrom}">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="priceTo" placeholder="Ціна до" th:value="${param.priceTo}">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="qtyFrom" placeholder="К-сть від" th:value="${param.qtyFrom}">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="qtyTo" placeholder="К-сть до" th:value="${param.qtyTo}">
+        </div>
+        <div class="col-md-12">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="inProducts" id="inProducts" th:checked="${param.inProducts}">
+                <label class="form-check-label" for="inProducts">Є у продуктах (IN)</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="showAggregates" id="showAggregates" th:checked="${param.showAggregates}">
+                <label class="form-check-label" for="showAggregates">Показати агрегати</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
+        </div>
+        <div class="col-md-2">
+            <a href="/materials" class="btn btn-secondary w-100">Очистити фільтри</a>
+        </div>
+    </form>
+    <div th:if="${aggregates != null}">
+        <div class="alert alert-info">
+            <b>MIN:</b> <span th:text="${aggregates['minPrice']}"></span>,
+            <b>MAX:</b> <span th:text="${aggregates['maxPrice']}"></span>,
+            <b>AVG:</b> <span th:text="${aggregates['avgPrice']}"></span>,
+            <b>SUM:</b> <span th:text="${aggregates['sumPrice']}"></span>,
+            <b>COUNT:</b> <span th:text="${aggregates['count']}"></span>
+        </div>
+    </div>
     <table class="table table-bordered table-striped shadow-lg">
         <thead>
-        <tr>
+        <tr th:if="${param.rightJoin} == null">
             <th>ID</th>
             <th>Назва</th>
             <th>Постачальник</th>
@@ -20,21 +70,32 @@
             <th>Кількість</th>
             <th>Дії</th>
         </tr>
+        <tr th:if="${param.rightJoin} != null">
+            <th>ID постачальника</th>
+            <th>Постачальник</th>
+            <th>Кількість матеріалів</th>
+        </tr>
         </thead>
         <tbody>
-        <tr th:each="material : ${materials}">
-            <td th:text="${material.id}"></td>
-            <td th:text="${material.name}"></td>
-            <td th:text="${supplierNames[material.supplierId]}"></td>
-            <td th:text="${material.price}"></td>
-            <td th:text="${material.quantity}"></td>
+        <tr th:if="${param.rightJoin} == null" th:each="material : ${materials}">
+            <td th:text="${material['id']}"></td>
+            <td th:text="${material['name']}"></td>
+            <td th:text="${supplierNames[material['supplier_id']]}"></td>
+            <td th:text="${material['price']}"></td>
+            <td th:text="${material['quantity']}"></td>
             <td>
-                <a th:href="@{'/materials/edit/' + ${material.id}}" class="btn btn-warning btn-sm">Редагувати</a>
-                <a th:href="@{'/materials/delete/' + ${material.id}}" class="btn btn-danger btn-sm">Видалити</a>
+                <a th:href="@{'/materials/edit/' + ${material['id']}}" class="btn btn-warning btn-sm">Редагувати</a>
+                <a th:href="@{'/materials/delete/' + ${material['id']}}" class="btn btn-danger btn-sm">Видалити</a>
             </td>
+        </tr>
+        <tr th:if="${param.rightJoin} != null" th:each="row : ${materials}">
+            <td th:text="${row['supplier_id']}"></td>
+            <td th:text="${row['supplier_name']}"></td>
+            <td th:text="${row['material_count']}"></td>
         </tr>
         </tbody>
     </table>
+    <a href="/materials/add" class="btn btn-primary mt-3">Додати матеріал</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -20,8 +20,16 @@ public class SupplierController {
     }
 
     @GetMapping
-    public String listSuppliers(Model model) {
-        List<Supplier> suppliers = supplierService.getAllSuppliers();
+    public String listSuppliers(Model model,
+                               @RequestParam(value = "name", required = false) String name,
+                               @RequestParam(value = "contact", required = false) String contact,
+                               @RequestParam(value = "address", required = false) String address) {
+        List<java.util.Map<String, Object>> suppliers = supplierService.filterSuppliers(name, contact, address);
+        java.util.Map<String, String> param = new java.util.HashMap<>();
+        param.put("name", name);
+        param.put("contact", contact);
+        param.put("address", address);
+        model.addAttribute("param", param);
         model.addAttribute("suppliers", suppliers);
         return "suppliers";
     }

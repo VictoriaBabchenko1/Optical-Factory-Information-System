@@ -40,4 +40,8 @@ public class ClientService implements IClientService {
     public void deleteClient(int id) {
         clientRepository.deleteClient(id);
     }
+
+    public List<java.util.Map<String, Object>> filterClients(String name, String contact, String address, boolean withProcessingOrders, boolean groupBy, String havingCount) {
+        return clientRepository.filterClients(name, contact, address, withProcessingOrders, groupBy, havingCount);
+    }
 } 

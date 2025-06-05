@@ -26,11 +26,38 @@ public class MaterialController {
     }
 
     @GetMapping
-    public String listMaterials(Model model) {
-        List<Material> materials = materialService.getAllMaterials();
-        Map<Integer, String> supplierNames = supplierService.getAllSuppliers().stream().collect(Collectors.toMap(Supplier::getId, Supplier::getName));
+    public String listMaterials(Model model,
+                               @RequestParam(value = "name", required = false) String name,
+                               @RequestParam(value = "supplierId", required = false) String supplierId,
+                               @RequestParam(value = "priceFrom", required = false) String priceFrom,
+                               @RequestParam(value = "priceTo", required = false) String priceTo,
+                               @RequestParam(value = "qtyFrom", required = false) String qtyFrom,
+                               @RequestParam(value = "qtyTo", required = false) String qtyTo,
+                               @RequestParam(value = "inProducts", required = false) String inProductsParam,
+                               @RequestParam(value = "sort", required = false) String sort,
+                               @RequestParam(value = "showAggregates", required = false) String showAggregatesParam) {
+        boolean inProducts = inProductsParam != null;
+        boolean showAggregates = showAggregatesParam != null;
+        List<java.util.Map<String, Object>> materials = materialService.filterMaterials(name, supplierId, priceFrom, priceTo, qtyFrom, qtyTo, inProducts, sort);
+        java.util.Map<String, Object> aggregates = null;
+        if (showAggregates) {
+            aggregates = materialService.getAggregates(name, supplierId, priceFrom, priceTo, qtyFrom, qtyTo, inProducts);
+        }
+        java.util.Map<String, String> param = new java.util.HashMap<>();
+        param.put("name", name);
+        param.put("supplierId", supplierId);
+        param.put("priceFrom", priceFrom);
+        param.put("priceTo", priceTo);
+        param.put("qtyFrom", qtyFrom);
+        param.put("qtyTo", qtyTo);
+        param.put("inProducts", inProductsParam);
+        param.put("sort", sort);
+        param.put("showAggregates", showAggregatesParam);
+        model.addAttribute("param", param);
         model.addAttribute("materials", materials);
-        model.addAttribute("supplierNames", supplierNames);
+        model.addAttribute("supplierNames", supplierService.getAllSuppliers().stream().collect(Collectors.toMap(org.example.model.Supplier::getId, org.example.model.Supplier::getName)));
+        model.addAttribute("aggregates", aggregates);
+        model.addAttribute("suppliers", supplierService.getAllSuppliers());
         return "materials";
     }
 

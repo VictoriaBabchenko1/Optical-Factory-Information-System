@@ -20,9 +20,26 @@ public class ClientController {
     }
 
     @GetMapping
-    public String listClients(Model model) {
-        List<Client> clients = clientService.getAllClients();
+    public String listClients(Model model,
+                             @RequestParam(value = "name", required = false) String name,
+                             @RequestParam(value = "contact", required = false) String contact,
+                             @RequestParam(value = "address", required = false) String address,
+                             @RequestParam(value = "withProcessingOrders", required = false) String withProcessingOrdersParam,
+                             @RequestParam(value = "groupBy", required = false) String groupByParam,
+                             @RequestParam(value = "havingCount", required = false) String havingCount) {
+        boolean withProcessingOrders = withProcessingOrdersParam != null;
+        boolean groupBy = groupByParam != null;
+        List<java.util.Map<String, Object>> clients = clientService.filterClients(name, contact, address, withProcessingOrders, groupBy, havingCount);
+        java.util.Map<String, String> param = new java.util.HashMap<>();
+        param.put("name", name);
+        param.put("contact", contact);
+        param.put("address", address);
+        param.put("withProcessingOrders", withProcessingOrdersParam);
+        param.put("groupBy", groupByParam);
+        param.put("havingCount", havingCount);
+        model.addAttribute("param", param);
         model.addAttribute("clients", clients);
+        model.addAttribute("groupBy", groupBy);
         return "clients";
     }
 

@@ -49,6 +49,25 @@ public class SupplierRepository implements ISupplierRepository {
         jdbcTemplate.update(sql, id);
     }
 
+    public List<java.util.Map<String, Object>> filterSuppliers(String name, String contact, String address) {
+        StringBuilder sql = new StringBuilder("SELECT s.id, s.name, s.contact, s.address FROM supplier s WHERE 1=1");
+        List<Object> params = new java.util.ArrayList<>();
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND s.name ILIKE ?");
+            params.add("%" + name + "%");
+        }
+        if (contact != null && !contact.isEmpty()) {
+            sql.append(" AND s.contact ILIKE ?");
+            params.add("%" + contact + "%");
+        }
+        if (address != null && !address.isEmpty()) {
+            sql.append(" AND s.address ILIKE ?");
+            params.add("%" + address + "%");
+        }
+        sql.append(" ORDER BY s.name");
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
+    }
+
     private static class SupplierRowMapper implements RowMapper<Supplier> {
         @Override
         public Supplier mapRow(ResultSet rs, int rowNum) throws SQLException {

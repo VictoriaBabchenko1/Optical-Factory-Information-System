@@ -49,6 +49,44 @@ public class ClientRepository implements IClientRepository {
         jdbcTemplate.update(sql, id);
     }
 
+    public List<java.util.Map<String, Object>> filterClients(String name, String contact, String address, boolean withProcessingOrders, boolean groupBy, String havingCount) {
+        StringBuilder sql = new StringBuilder();
+        List<Object> params = new java.util.ArrayList<>();
+        if (groupBy) {
+            sql.append("SELECT c.id, c.name, c.contact, c.address, COUNT(o.id) as order_count FROM client c LEFT JOIN \"order\" o ON c.id = o.client_id WHERE 1=1");
+        } else {
+            sql.append("SELECT c.id, c.name, c.contact, c.address FROM client c WHERE 1=1");
+        }
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND c.name ILIKE ?");
+            params.add("%" + name + "%");
+        }
+        if (contact != null && !contact.isEmpty()) {
+            sql.append(" AND c.contact ILIKE ?");
+            params.add("%" + contact + "%");
+        }
+        if (address != null && !address.isEmpty()) {
+            sql.append(" AND c.address ILIKE ?");
+            params.add("%" + address + "%");
+        }
+        if (withProcessingOrders) {
+            if (groupBy) {
+                sql.append(" AND EXISTS (SELECT 1 FROM \"order\" o2 WHERE o2.client_id = c.id AND o2.status = 'В обробці')");
+            } else {
+                sql.append(" AND EXISTS (SELECT 1 FROM \"order\" o2 WHERE o2.client_id = c.id AND o2.status = 'В обробці')");
+            }
+        }
+        if (groupBy) {
+            sql.append(" GROUP BY c.id, c.name, c.contact, c.address");
+            if (havingCount != null && !havingCount.isEmpty()) {
+                sql.append(" HAVING COUNT(o.id) >= ?");
+                params.add(Integer.parseInt(havingCount));
+            }
+        }
+        sql.append(" ORDER BY c.name");
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
+    }
+
     private static class ClientRowMapper implements RowMapper<Client> {
         @Override
         public Client mapRow(ResultSet rs, int rowNum) throws SQLException {
