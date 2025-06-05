@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.example.service.IWarehouseService;
 import org.example.model.Warehouse;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProductController {
@@ -32,13 +33,59 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String listProducts(Model model) {
-        List<Product> products = productService.getAllProducts();
+    public String listProducts(
+            Model model,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "categoryId", required = false) String categoryId,
+            @RequestParam(value = "materialId", required = false) String materialId,
+            @RequestParam(value = "priceFrom", required = false) String priceFrom,
+            @RequestParam(value = "priceTo", required = false) String priceTo,
+            @RequestParam(value = "qtyFrom", required = false) String qtyFrom,
+            @RequestParam(value = "qtyTo", required = false) String qtyTo,
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "showAggregates", required = false) String showAggregatesParam,
+            @RequestParam(value = "uniqueCategories", required = false) String uniqueCategoriesParam,
+            @RequestParam(value = "inOrders", required = false) String inOrdersParam,
+            @RequestParam(value = "withCategory", required = false) String withCategoryParam,
+            @RequestParam(value = "maxPrice", required = false) String maxPriceParam
+    ) {
+        boolean showAggregates = showAggregatesParam != null;
+        boolean uniqueCategories = uniqueCategoriesParam != null;
+        boolean inOrders = inOrdersParam != null;
+        boolean withCategory = withCategoryParam != null;
+        boolean maxPrice = maxPriceParam != null;
+
+        List<Map<String, Object>> products = productService.filterProducts(
+            name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, sort, uniqueCategories, inOrders, withCategory, maxPrice
+        );
         Map<Integer, String> categoryNames = categoryService.getAllCategories().stream().collect(Collectors.toMap(ProductCategory::getId, ProductCategory::getName));
         Map<Integer, String> materialNames = materialService.getAllMaterials().stream().collect(Collectors.toMap(Material::getId, Material::getName));
         model.addAttribute("products", products);
         model.addAttribute("categoryNames", categoryNames);
         model.addAttribute("materialNames", materialNames);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("materials", materialService.getAllMaterials());
+        Map<String, String> param = new java.util.HashMap<>();
+        param.put("name", name);
+        param.put("categoryId", categoryId);
+        param.put("materialId", materialId);
+        param.put("priceFrom", priceFrom);
+        param.put("priceTo", priceTo);
+        param.put("qtyFrom", qtyFrom);
+        param.put("qtyTo", qtyTo);
+        param.put("sort", sort);
+        param.put("showAggregates", showAggregates ? "on" : "");
+        param.put("uniqueCategories", uniqueCategories ? "on" : "");
+        param.put("inOrders", inOrders ? "on" : "");
+        param.put("withCategory", withCategory ? "on" : "");
+        param.put("maxPrice", maxPrice ? "on" : "");
+        model.addAttribute("param", param);
+        model.addAttribute("showAggregates", showAggregates);
+        if (showAggregates) {
+            model.addAttribute("aggregates", productService.getAggregates(
+                name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, uniqueCategories, inOrders, withCategory, maxPrice
+            ));
+        }
         return "products";
     }
 

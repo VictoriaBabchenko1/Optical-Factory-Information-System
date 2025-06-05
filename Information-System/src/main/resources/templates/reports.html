@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Звіти</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/menu :: menu"></div>
+<div class="container mt-5">
+    <h1 class="mb-4">Звіти</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group shadow">
+                <a th:each="report, iterStat : ${reports}"
+                   th:href="@{'/reports/' + ${iterStat.index + 1}}"
+                   th:text="${report}"
+                   class="list-group-item list-group-item-action"
+                   th:classappend="${#httpServletRequest.requestURI.endsWith('/' + (iterStat.index + 1))} ? 'active'">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div th:if="${result}">
+                <h2 class="mb-3">Результат</h2>
+                <div th:if="${#lists.isEmpty(result)}" class="alert alert-info">Немає даних</div>
+                <table th:if="${!#lists.isEmpty(result)}" class="table table-bordered table-striped shadow">
+                    <thead>
+                    <tr th:each="header : ${headers}">
+                        <th th:text="${header}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="row : ${result}">
+                        <td th:each="cell : ${row}" th:text="${cell}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${!result}">
+                <div class="alert alert-secondary">Оберіть звіт для перегляду результату.</div>
+            </div>
+            <div class="mt-4">
+                <h5>Опис звіту:</h5>
+                <div th:switch="${selectedReport}">
+                    <div th:case="1">Всі продукти: ID, Назва, Категорія, Матеріал, Ціна, Кількість, Склад</div>
+                    <div th:case="2">Продукти у діапазоні цін: ID, Назва, Ціна</div>
+                    <div th:case="3">Продукти певних категорій: ID, Назва, Категорія</div>
+                    <div th:case="4">Продукти з назвою LIKE: ID, Назва</div>
+                    <div th:case="5">Продукти з ціною > X і кількістю > Y: ID, Назва, Ціна, Кількість</div>
+                    <div th:case="6">Продукти з ціною > X або кількістю > Y: ID, Назва, Ціна, Кількість</div>
+                    <div th:case="7">Унікальні категорії продуктів: Категорія</div>
+                    <div th:case="8">Мінімальна/максимальна ціна продукту: Мінімальна ціна, Максимальна ціна</div>
+                    <div th:case="9">Середня ціна, сума цін продуктів: Середня ціна, Сума цін</div>
+                    <div th:case="10">Кількість продуктів: Кількість</div>
+                    <div th:case="11">Кількість продуктів у кожній категорії: Категорія, Кількість</div>
+                    <div th:case="12">Кількість продуктів у категорії X: Категорія, Кількість</div>
+                    <div th:case="13">Категорії, де кількість продуктів > N: Категорія, Кількість</div>
+                    <div th:case="14">Категорії, де кількість продуктів > N, відсортовано за кількістю: Категорія, Кількість</div>
+                    <div th:case="15">Продукти з категоріями (INNER JOIN): Назва продукту, Категорія</div>
+                    <div th:case="16">Всі продукти з категоріями (LEFT JOIN): Назва продукту, Категорія</div>
+                    <div th:case="17">Всі категорії з продуктами (RIGHT JOIN): Категорія, Назва продукту</div>
+                    <div th:case="18">Продукти з категоріями, де ціна > X (INNER JOIN + умова): Назва продукту, Категорія, Ціна</div>
+                    <div th:case="19">Продукти з категоріями, де назва LIKE (INNER JOIN + LIKE): Назва продукту, Категорія</div>
+                    <div th:case="20">Кількість продуктів у кожній категорії (INNER JOIN + агрегат): Категорія, Кількість</div>
+                    <div th:case="21">Категорії з кількістю продуктів > N (INNER JOIN + агрегат + HAVING): Категорія, Кількість</div>
+                    <div th:case="22">Продукти з ціною = (SELECT MAX(...)): Назва продукту, Ціна</div>
+                    <div th:case="23">Категорії з середньою ціною продуктів > X (підзапит + агрегат): Категорія, Середня ціна</div>
+                    <div th:case="24">Продукти, для яких існують замовлення (EXISTS): Назва продукту</div>
+                    <div th:case="25">Продукти з ціною > ANY (SELECT ...): Назва продукту, Ціна</div>
+                    <div th:case="26">Продукти, які є у замовленнях (IN + підзапит): Назва продукту</div>
+                    <div th:case="27">Продукти з категоріями, які є у замовленнях (INNER JOIN + підзапит): Назва продукту, Категорія</div>
+                    <div th:case="*">Оберіть звіт зі списку ліворуч.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

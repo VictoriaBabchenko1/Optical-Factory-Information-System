@@ -18,6 +18,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation ("org.springframework.boot:spring-boot-starter-web")
+    compileOnly ("javax.servlet:javax.servlet-api:4.0.1")
 }
 
 tasks.test {

@@ -9,7 +9,78 @@
 <div th:replace="fragments/menu :: menu"></div>
 <div class="container mt-5">
     <h1 class="mb-4">Список продукції</h1>
-    <a href="/products/add" class="btn btn-primary mb-3">Додати продукт</a>
+    <form class="row g-3 mb-4" method="get" action="/products">
+        <div class="col-md-3">
+            <input type="text" class="form-control" name="name" placeholder="Назва продукту" th:value="${param.name}">
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="categoryId">
+                <option value="">Категорія</option>
+                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${param.categoryId} == ${cat.id}"></option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="materialId">
+                <option value="">Матеріал</option>
+                <option th:each="mat : ${materials}" th:value="${mat.id}" th:text="${mat.name}" th:selected="${param.materialId} == ${mat.id}"></option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="priceFrom" placeholder="Ціна від" th:value="${param.priceFrom}">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="priceTo" placeholder="Ціна до" th:value="${param.priceTo}">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="qtyFrom" placeholder="Кількість від" th:value="${param.qtyFrom}">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control" name="qtyTo" placeholder="Кількість до" th:value="${param.qtyTo}">
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="sort">
+                <option value="">Сортувати за...</option>
+                <option value="price" th:selected="${param.sort} == 'price'">Ціною</option>
+                <option value="quantity" th:selected="${param.sort} == 'quantity'">Кількістю</option>
+                <option value="name" th:selected="${param.sort} == 'name'">Назвою</option>
+            </select>
+        </div>
+        <div class="col-md-12">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="showAggregates" id="showAggregates" th:checked="${param.showAggregates}">
+                <label class="form-check-label" for="showAggregates">Показати агрегати</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="inOrders" id="inOrders" th:checked="${param.inOrders}">
+                <label class="form-check-label" for="inOrders">Є у замовленнях</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="withCategory" id="withCategory" th:checked="${param.withCategory}">
+                <label class="form-check-label" for="withCategory">З категоріями</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="maxPrice" id="maxPrice" th:checked="${param.maxPrice}">
+                <label class="form-check-label" for="maxPrice">Ціна = MAX</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
+        </div>
+        <div class="col-md-2">
+            <a href="/products" class="btn btn-secondary w-100">Очистити фільтри</a>
+        </div>
+    </form>
+    <div th:if="${showAggregates}" class="mb-4">
+        <div class="card card-body bg-light shadow-sm">
+            <div class="row">
+                <div class="col"><b>Мін. ціна:</b> <span th:text="${aggregates.minPrice}"></span></div>
+                <div class="col"><b>Макс. ціна:</b> <span th:text="${aggregates.maxPrice}"></span></div>
+                <div class="col"><b>Середня ціна:</b> <span th:text="${aggregates.avgPrice}"></span></div>
+                <div class="col"><b>Сума цін:</b> <span th:text="${aggregates.sumPrice}"></span></div>
+                <div class="col"><b>Кількість продуктів:</b> <span th:text="${aggregates.count}"></span></div>
+            </div>
+        </div>
+    </div>
     <table class="table table-bordered table-striped shadow-lg">
         <thead>
         <tr>
@@ -25,20 +96,21 @@
         </thead>
         <tbody>
         <tr th:each="product : ${products}">
-            <td th:text="${product.id}"></td>
-            <td th:text="${product.name}"></td>
-            <td th:text="${categoryNames[product.categoryId]}"></td>
-            <td th:text="${materialNames[product.materialId]}"></td>
-            <td th:text="${product.price}"></td>
-            <td th:text="${product.quantity}"></td>
-            <td th:text="${product.warehouseId}"></td>
+            <td th:text="${product['id']}"></td>
+            <td th:text="${product['name']}"></td>
+            <td th:text="${categoryNames[product['category_id']]}"></td>
+            <td th:text="${materialNames[product['material_id']]}"></td>
+            <td th:text="${product['price']}"></td>
+            <td th:text="${product['quantity']}"></td>
+            <td th:text="${product['warehouse_id']}"></td>
             <td>
-                <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-warning btn-sm">Редагувати</a>
-                <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger btn-sm">Видалити</a>
+                <a th:href="@{'/products/edit/' + ${product['id']}}" class="btn btn-warning btn-sm">Редагувати</a>
+                <a th:href="@{'/products/delete/' + ${product['id']}}" class="btn btn-danger btn-sm">Видалити</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <a href="/products/add" class="btn btn-primary mt-3">Додати продукт</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
