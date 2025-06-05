@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ProductionRepository implements IProductionRepository {
@@ -47,6 +48,46 @@ public class ProductionRepository implements IProductionRepository {
     public void deleteProduction(int id) {
         String sql = "DELETE FROM production WHERE id=?";
         jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public List<Map<String, Object>> filterProduction(String productId, String employeeId, String qtyFrom, String qtyTo, String sortDate) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM production WHERE 1=1");
+        List<Object> params = new java.util.ArrayList<>();
+        if (productId != null && !productId.isEmpty()) {
+            sql.append(" AND product_id = ?");
+            params.add(Integer.parseInt(productId));
+        }
+        if (employeeId != null && !employeeId.isEmpty()) {
+            sql.append(" AND employee_id = ?");
+            params.add(Integer.parseInt(employeeId));
+        }
+        if (qtyFrom != null && !qtyFrom.isEmpty()) {
+            sql.append(" AND quantity >= ?");
+            params.add(Integer.parseInt(qtyFrom));
+        }
+        if (qtyTo != null && !qtyTo.isEmpty()) {
+            sql.append(" AND quantity <= ?");
+            params.add(Integer.parseInt(qtyTo));
+        }
+        if ("asc".equalsIgnoreCase(sortDate)) {
+            sql.append(" ORDER BY date ASC");
+        } else {
+            sql.append(" ORDER BY date DESC");
+        }
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllProductsForFilter() {
+        String sql = "SELECT id, name FROM product ORDER BY name";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllEmployeesForFilter() {
+        String sql = "SELECT id, name FROM employee ORDER BY name";
+        return jdbcTemplate.queryForList(sql);
     }
 
     private static class ProductionRowMapper implements RowMapper<Production> {

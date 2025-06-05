@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductionService implements IProductionService {
@@ -39,5 +40,20 @@ public class ProductionService implements IProductionService {
     @Override
     public void deleteProduction(int id) {
         productionRepository.deleteProduction(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> filterProduction(String productId, String employeeId, String qtyFrom, String qtyTo, String sortDate) {
+        return productionRepository.filterProduction(productId, employeeId, qtyFrom, qtyTo, sortDate);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllProductsForFilter() {
+        return productionRepository.getAllProductsForFilter();
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllEmployeesForFilter() {
+        return productionRepository.getAllEmployeesForFilter();
     }
 } 
