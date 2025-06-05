@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/orders")
@@ -26,12 +27,20 @@ public class OrderController {
     }
 
     @GetMapping
-    public String listOrders(Model model) {
-        List<Order> orders = orderService.getAllOrders();
-        List<Client> clients = clientService.getAllClients();
-        Map<Integer, String> clientNames = clients.stream().collect(Collectors.toMap(Client::getId, Client::getName));
+    public String listOrders(Model model,
+                            @RequestParam(value = "clientId", required = false) String clientId,
+                            @RequestParam(value = "status", required = false) String status,
+                            @RequestParam(value = "withItems", required = false) String withItemsParam) {
+        boolean withItems = withItemsParam != null;
+        List<Map<String, Object>> orders = orderService.filterOrders(clientId, status, withItems);
         model.addAttribute("orders", orders);
-        model.addAttribute("clientNames", clientNames);
+        model.addAttribute("clients", orderService.getAllClientsForFilter());
+        model.addAttribute("statuses", orderService.getAllStatuses());
+        Map<String, String> param = new HashMap<>();
+        param.put("clientId", clientId);
+        param.put("status", status);
+        param.put("withItems", withItems ? "on" : "");
+        model.addAttribute("param", param);
         return "orders";
     }
 

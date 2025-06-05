@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductCategoryService implements IProductCategoryService {
@@ -39,5 +40,10 @@ public class ProductCategoryService implements IProductCategoryService {
     @Override
     public void deleteCategory(int id) {
         categoryRepository.deleteCategory(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> filterCategories(String name, boolean withProducts) {
+        return categoryRepository.filterCategories(name, withProducts);
     }
 } 

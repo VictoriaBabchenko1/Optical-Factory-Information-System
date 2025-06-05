@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ProductCategoryRepository implements IProductCategoryRepository {
@@ -47,6 +48,23 @@ public class ProductCategoryRepository implements IProductCategoryRepository {
     public void deleteCategory(int id) {
         String sql = "DELETE FROM product_category WHERE id=?";
         jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public List<Map<String, Object>> filterCategories(String name, boolean withProducts) {
+        StringBuilder sql = new StringBuilder();
+        if (withProducts) {
+            sql.append("SELECT DISTINCT c.id, c.name, c.description FROM product_category c JOIN product p ON c.id = p.category_id WHERE 1=1");
+        } else {
+            sql.append("SELECT c.id, c.name, c.description FROM product_category c WHERE 1=1");
+        }
+        List<Object> params = new java.util.ArrayList<>();
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND c.name ILIKE ?");
+            params.add("%" + name + "%");
+        }
+        sql.append(" ORDER BY c.name");
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
 
     private static class CategoryRowMapper implements RowMapper<ProductCategory> {

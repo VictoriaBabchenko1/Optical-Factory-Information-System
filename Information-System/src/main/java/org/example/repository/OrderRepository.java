@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class OrderRepository implements IOrderRepository {
@@ -47,6 +48,37 @@ public class OrderRepository implements IOrderRepository {
     public void deleteOrder(int id) {
         String sql = "DELETE FROM \"order\" WHERE id=?";
         jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public List<Map<String, Object>> filterOrders(String clientId, String status, boolean withItems) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM \"order\" WHERE 1=1");
+        List<Object> params = new java.util.ArrayList<>();
+        if (clientId != null && !clientId.isEmpty()) {
+            sql.append(" AND client_id = ?");
+            params.add(Integer.parseInt(clientId));
+        }
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND status = ?");
+            params.add(status);
+        }
+        if (withItems) {
+            sql.append(" AND EXISTS (SELECT 1 FROM order_item oi WHERE oi.order_id = \"order\".id)");
+        }
+        sql.append(" ORDER BY date DESC");
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllClientsForFilter() {
+        String sql = "SELECT id, name FROM client ORDER BY name";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
+    public List<String> getAllStatuses() {
+        String sql = "SELECT DISTINCT status FROM \"order\" ORDER BY status";
+        return jdbcTemplate.queryForList(sql, String.class);
     }
 
     private static class OrderRowMapper implements RowMapper<Order> {

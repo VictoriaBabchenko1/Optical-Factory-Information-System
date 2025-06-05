@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/categories")
@@ -20,9 +22,16 @@ public class ProductCategoryController {
     }
 
     @GetMapping
-    public String listCategories(Model model) {
-        List<ProductCategory> categories = categoryService.getAllCategories();
+    public String listCategories(Model model,
+                                @RequestParam(value = "name", required = false) String name,
+                                @RequestParam(value = "withProducts", required = false) String withProductsParam) {
+        boolean withProducts = withProductsParam != null;
+        List<Map<String, Object>> categories = categoryService.filterCategories(name, withProducts);
         model.addAttribute("categories", categories);
+        Map<String, String> param = new HashMap<>();
+        param.put("name", name);
+        param.put("withProducts", withProducts ? "on" : "");
+        model.addAttribute("param", param);
         return "categories";
     }
 

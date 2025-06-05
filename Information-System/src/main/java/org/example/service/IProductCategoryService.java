@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.model.ProductCategory;
 import java.util.List;
+import java.util.Map;
 
 public interface IProductCategoryService {
     void addCategory(ProductCategory category);
@@ -9,4 +10,5 @@ public interface IProductCategoryService {
     List<ProductCategory> getAllCategories();
     void updateCategory(ProductCategory category);
     void deleteCategory(int id);
+    List<Map<String, Object>> filterCategories(String name, boolean withProducts);
 } 

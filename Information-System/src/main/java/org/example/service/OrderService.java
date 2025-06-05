@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderService implements IOrderService {
@@ -39,5 +40,20 @@ public class OrderService implements IOrderService {
     @Override
     public void deleteOrder(int id) {
         orderRepository.deleteOrder(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> filterOrders(String clientId, String status, boolean withItems) {
+        return orderRepository.filterOrders(clientId, status, withItems);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllClientsForFilter() {
+        return orderRepository.getAllClientsForFilter();
+    }
+
+    @Override
+    public List<String> getAllStatuses() {
+        return orderRepository.getAllStatuses();
     }
 } 
