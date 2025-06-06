@@ -9,21 +9,21 @@
 <div th:replace="fragments/menu :: menu"></div>
 <div class="container mt-5">
     <h1 class="mb-4">Категорії продукції</h1>
-    <form class="row g-3 mb-4" method="get" action="/categories">
-        <div class="col-md-4">
-            <input type="text" class="form-control" name="name" placeholder="Назва категорії" th:value="${param.name}">
-        </div>
-        <div class="col-md-4">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="withProducts" id="withProducts" th:checked="${param.withProducts}">
-                <label class="form-check-label" for="withProducts">Лише категорії з продуктами (DISTINCT)</label>
+    <form class="mb-4" method="get" action="/categories">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="name" placeholder="Назва категорії" th:value="${param.name}">
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="withProducts" id="withProducts" th:checked="${param.withProducts}">
+                    <label class="form-check-label" for="withProducts">Лише категорії з продуктами (DISTINCT)</label>
+                </div>
             </div>
         </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
-        </div>
-        <div class="col-md-2">
-            <a href="/categories" class="btn btn-secondary w-100">Очистити фільтри</a>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Застосувати фільтр</button>
+            <a href="/categories" class="btn btn-secondary">Очистити фільтри</a>
         </div>
     </form>
     <table class="table table-bordered table-striped shadow-lg">

@@ -9,37 +9,37 @@
 <div th:replace="fragments/menu :: menu"></div>
 <div class="container mt-5">
     <h1 class="mb-4">Виробництво</h1>
-    <form class="row g-3 mb-4" method="get" action="/production">
-        <div class="col-md-3">
-            <select class="form-select" name="productId">
-                <option value="">Продукт</option>
-                <option th:each="product : ${products}" th:value="${product['id']}" th:text="${product['name']}" th:selected="${param.productId} == ${product['id']}"></option>
-            </select>
+    <form class="mb-4" method="get" action="/production">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <select class="form-select" name="productId">
+                    <option value="">Продукт</option>
+                    <option th:each="product : ${products}" th:value="${product['id']}" th:text="${product['name']}" th:selected="${param.productId} == ${product['id']}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="employeeId">
+                    <option value="">Співробітник</option>
+                    <option th:each="employee : ${employees}" th:value="${employee['id']}" th:text="${employee['name']}" th:selected="${param.employeeId} == ${employee['id']}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="qtyFrom" placeholder="К-сть від" th:value="${param.qtyFrom}">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="qtyTo" placeholder="К-сть до" th:value="${param.qtyTo}">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="sortDate">
+                    <option value="">Сортувати за датою</option>
+                    <option value="asc" th:selected="${param.sortDate} == 'asc'">Від старих до нових</option>
+                    <option value="desc" th:selected="${param.sortDate} == 'desc'">Від нових до старих</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-3">
-            <select class="form-select" name="employeeId">
-                <option value="">Співробітник</option>
-                <option th:each="employee : ${employees}" th:value="${employee['id']}" th:text="${employee['name']}" th:selected="${param.employeeId} == ${employee['id']}"></option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <input type="number" class="form-control" name="qtyFrom" placeholder="К-сть від" th:value="${param.qtyFrom}">
-        </div>
-        <div class="col-md-2">
-            <input type="number" class="form-control" name="qtyTo" placeholder="К-сть до" th:value="${param.qtyTo}">
-        </div>
-        <div class="col-md-3">
-            <select class="form-select" name="sortDate">
-                <option value="">Сортувати за датою</option>
-                <option value="asc" th:selected="${param.sortDate} == 'asc'">Від старих до нових</option>
-                <option value="desc" th:selected="${param.sortDate} == 'desc'">Від нових до старих</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
-        </div>
-        <div class="col-md-2">
-            <a href="/production" class="btn btn-secondary w-100">Очистити фільтри</a>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Застосувати фільтр</button>
+            <a href="/production" class="btn btn-secondary">Очистити фільтри</a>
         </div>
     </form>
     <table class="table table-bordered table-striped shadow-lg">
