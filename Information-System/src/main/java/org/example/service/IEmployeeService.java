@@ -12,6 +12,8 @@ public interface IEmployeeService {
     void deleteEmployee(int id);
     List<Map<String, Object>> filterEmployees(
             String searchTerm,
+            boolean inShipments,
+            boolean inProduction,
             boolean groupProductionCount,
             Integer minProductionCount
     );

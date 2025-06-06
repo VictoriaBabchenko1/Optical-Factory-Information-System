@@ -35,10 +35,12 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public List<Map<String, Object>> filterEmployees(
             String searchTerm,
+            boolean inShipments,
+            boolean inProduction,
             boolean groupProductionCount,
             Integer minProductionCount
     ) {
-        return employeeRepository.filterEmployees(searchTerm, groupProductionCount, minProductionCount);
+        return employeeRepository.filterEmployees(searchTerm, inShipments, inProduction, groupProductionCount, minProductionCount);
     }
 
     @Override

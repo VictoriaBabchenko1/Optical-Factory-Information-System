@@ -23,14 +23,18 @@ public class EmployeeController {
     @GetMapping
     public String listEmployees(
             @RequestParam(value = "searchTerm", required = false) String searchTerm,
+            @RequestParam(value = "inShipments", defaultValue = "false") boolean inShipments,
+            @RequestParam(value = "inProduction", defaultValue = "false") boolean inProduction,
             @RequestParam(value = "groupProductionCount", defaultValue = "false") boolean groupProductionCount,
             @RequestParam(value = "minProductionCount", required = false) Integer minProductionCount,
             Model model) {
         List<Map<String, Object>> employees = employeeService.filterEmployees(
-                searchTerm, groupProductionCount, minProductionCount
+                searchTerm, inShipments, inProduction, groupProductionCount, minProductionCount
         );
         model.addAttribute("employees", employees);
         model.addAttribute("searchTerm", searchTerm);
+        model.addAttribute("inShipments", inShipments);
+        model.addAttribute("inProduction", inProduction);
         model.addAttribute("groupProductionCount", groupProductionCount);
         model.addAttribute("minProductionCount", minProductionCount);
         return "employees";

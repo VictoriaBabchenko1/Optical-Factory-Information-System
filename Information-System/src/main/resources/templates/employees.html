@@ -16,6 +16,20 @@
                 <label for="searchTerm" class="form-label">ПІБ або Посада:</label>
                 <input type="text" id="searchTerm" name="searchTerm" class="form-control" th:value="${searchTerm}" placeholder="Введіть ПІБ або Посаду">
             </div>
+        </div>
+        <div class="row g-3 mt-3">
+            <div class="col-md-4 d-flex align-items-center">
+                <div class="form-check">
+                    <input type="checkbox" id="inShipments" name="inShipments" class="form-check-input" th:checked="${inShipments}">
+                    <label class="form-check-label" for="inShipments">Співробітники, які брали участь у відвантаженнях</label>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+                <div class="form-check">
+                    <input type="checkbox" id="inProduction" name="inProduction" class="form-check-input" th:checked="${inProduction}">
+                    <label class="form-check-label" for="inProduction">Співробітники, які брали участь у виробництві</label>
+                </div>
+            </div>
             <div class="col-md-4 d-flex align-items-center">
                 <div class="form-check">
                     <input type="checkbox" id="groupProductionCount" name="groupProductionCount" class="form-check-input" th:checked="${groupProductionCount}">
@@ -32,6 +46,7 @@
             <a th:href="@{/employees}" class="btn btn-secondary">Очистити фільтри</a>
         </div>
     </form>
+
     <table class="table table-bordered table-striped shadow-lg">
         <thead>
         <tr>

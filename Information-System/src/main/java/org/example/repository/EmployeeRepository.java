@@ -42,24 +42,38 @@ public class EmployeeRepository implements IEmployeeRepository {
     @Override
     public List<Map<String, Object>> filterEmployees(
             String searchTerm,
+            boolean inShipments,
+            boolean inProduction,
             boolean groupProductionCount,
             Integer minProductionCount
     ) {
         StringBuilder sql = new StringBuilder();
         List<Object> args = new ArrayList<>();
 
+        sql.append("SELECT e.id, e.name, e.position, e.contact ");
         if (groupProductionCount) {
-            sql.append("SELECT e.id, e.name, e.position, e.contact, COUNT(p.id) AS production_count ");
-            sql.append("FROM employee e LEFT JOIN production p ON e.id = p.employee_id ");
-            sql.append("WHERE 1=1 ");
-        } else {
-            sql.append("SELECT id, name, position, contact FROM employee WHERE 1=1 ");
+            sql.append(", COUNT(p.id) AS production_count ");
+        }
+        sql.append("FROM employee e ");
+
+        if (groupProductionCount) {
+            sql.append("LEFT JOIN production p ON e.id = p.employee_id ");
         }
 
+        sql.append("WHERE 1=1 ");
+
         if (searchTerm != null && !searchTerm.isEmpty()) {
-            sql.append("AND (name ILIKE ? OR position ILIKE ?) ");
+            sql.append("AND (e.name ILIKE ? OR e.position ILIKE ?) ");
             args.add("%" + searchTerm + "%");
             args.add("%" + searchTerm + "%");
+        }
+
+        if (inShipments) {
+            sql.append("AND EXISTS (SELECT 1 FROM shipment s WHERE s.employee_id = e.id) ");
+        }
+
+        if (inProduction) {
+            sql.append("AND EXISTS (SELECT 1 FROM production prod WHERE prod.employee_id = e.id) ");
         }
 
         if (groupProductionCount) {
