@@ -28,6 +28,12 @@
         <div class="col-md-3">
             <input type="number" class="form-control" name="minOrdersCount" placeholder="Клієнтів, які зробили ≥ N замовлень" th:value="${param.minOrdersCount}">
         </div>
+        <div class="col-md-3">
+            <select class="form-select" name="productCategoryId">
+                <option value="">Категорія продукту</option>
+                <option th:each="cat : ${productCategories}" th:value="${cat['id']}" th:text="${cat['name']}" th:selected="${param.productCategoryId} == ${cat['id']}"></option>
+            </select>
+        </div>
         <div class="col-md-12">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="groupBy" id="groupBy" th:checked="${param.groupBy}">
@@ -42,11 +48,21 @@
                 <label class="form-check-label" for="qtyGreaterThanAverage">Замовлення з к-стю товарів більшою за середню</label>
             </div>
         </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
+        <div class="col-md-12">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="includeAnyProductFromCategory" id="includeAnyProductFromCategory" th:checked="${param.includeAnyProductFromCategory}">
+                <label class="form-check-label" for="includeAnyProductFromCategory">Замовлення, що містять будь-який товар з обраної категорії</label>
+            </div>
         </div>
-        <div class="col-md-2">
-            <a href="/orders" class="btn btn-secondary w-100">Очистити фільтри</a>
+        <div class="col-md-12 mt-3">
+            <div class="row">
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
+                </div>
+                <div class="col-md-2">
+                    <a href="/orders" class="btn btn-secondary w-100">Очистити фільтри</a>
+                </div>
+            </div>
         </div>
     </form>
     <table class="table table-bordered table-striped shadow-lg">

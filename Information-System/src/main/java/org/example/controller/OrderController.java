@@ -4,6 +4,7 @@ import org.example.model.Order;
 import org.example.model.Client;
 import org.example.service.IOrderService;
 import org.example.service.IClientService;
+import org.example.service.IProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +20,13 @@ import java.util.HashMap;
 public class OrderController {
     private final IOrderService orderService;
     private final IClientService clientService;
+    private final IProductCategoryService productCategoryService;
 
     @Autowired
-    public OrderController(IOrderService orderService, IClientService clientService) {
+    public OrderController(IOrderService orderService, IClientService clientService, IProductCategoryService productCategoryService) {
         this.orderService = orderService;
         this.clientService = clientService;
+        this.productCategoryService = productCategoryService;
     }
 
     @GetMapping
@@ -34,11 +37,14 @@ public class OrderController {
                             @RequestParam(value = "havingCount", required = false) String havingCount,
                             @RequestParam(value = "withSum", required = false) String withSumParam,
                             @RequestParam(value = "qtyGreaterThanAverage", required = false) String qtyGreaterThanAverageParam,
-                            @RequestParam(value = "minOrdersCount", required = false) String minOrdersCount) {
+                            @RequestParam(value = "minOrdersCount", required = false) String minOrdersCount,
+                            @RequestParam(value = "productCategoryId", required = false) String productCategoryId,
+                            @RequestParam(value = "includeAnyProductFromCategory", required = false) String includeAnyProductFromCategoryParam) {
         boolean groupBy = groupByParam != null;
         boolean withSum = withSumParam != null;
         boolean qtyGreaterThanAverage = qtyGreaterThanAverageParam != null;
-        List<java.util.Map<String, Object>> orders = orderService.filterOrdersAdvanced(clientId, status, groupBy, havingCount, withSum, qtyGreaterThanAverage, minOrdersCount);
+        boolean includeAnyProductFromCategory = includeAnyProductFromCategoryParam != null;
+        List<java.util.Map<String, Object>> orders = orderService.filterOrdersAdvanced(clientId, status, groupBy, havingCount, withSum, qtyGreaterThanAverage, minOrdersCount, productCategoryId, includeAnyProductFromCategory);
         java.util.Map<String, String> param = new java.util.HashMap<>();
         param.put("clientId", clientId);
         param.put("status", status);
@@ -47,13 +53,17 @@ public class OrderController {
         param.put("withSum", withSumParam);
         param.put("qtyGreaterThanAverage", qtyGreaterThanAverageParam);
         param.put("minOrdersCount", minOrdersCount);
+        param.put("productCategoryId", productCategoryId);
+        param.put("includeAnyProductFromCategory", includeAnyProductFromCategoryParam);
         model.addAttribute("param", param);
         model.addAttribute("orders", orders);
         model.addAttribute("clients", orderService.getAllClientsForFilter());
         model.addAttribute("statuses", orderService.getAllStatuses());
+        model.addAttribute("productCategories", productCategoryService.getAllCategories());
         model.addAttribute("groupBy", groupBy);
         model.addAttribute("withSum", withSum);
         model.addAttribute("qtyGreaterThanAverage", qtyGreaterThanAverage);
+        model.addAttribute("includeAnyProductFromCategory", includeAnyProductFromCategory);
         return "orders";
     }
 
