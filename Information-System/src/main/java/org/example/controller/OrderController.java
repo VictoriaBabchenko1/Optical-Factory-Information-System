@@ -33,11 +33,12 @@ public class OrderController {
                             @RequestParam(value = "groupBy", required = false) String groupByParam,
                             @RequestParam(value = "havingCount", required = false) String havingCount,
                             @RequestParam(value = "withSum", required = false) String withSumParam,
-                            @RequestParam(value = "qtyGreaterThanAverage", required = false) String qtyGreaterThanAverageParam) {
+                            @RequestParam(value = "qtyGreaterThanAverage", required = false) String qtyGreaterThanAverageParam,
+                            @RequestParam(value = "minOrdersCount", required = false) String minOrdersCount) {
         boolean groupBy = groupByParam != null;
         boolean withSum = withSumParam != null;
         boolean qtyGreaterThanAverage = qtyGreaterThanAverageParam != null;
-        List<java.util.Map<String, Object>> orders = orderService.filterOrdersAdvanced(clientId, status, groupBy, havingCount, withSum, qtyGreaterThanAverage);
+        List<java.util.Map<String, Object>> orders = orderService.filterOrdersAdvanced(clientId, status, groupBy, havingCount, withSum, qtyGreaterThanAverage, minOrdersCount);
         java.util.Map<String, String> param = new java.util.HashMap<>();
         param.put("clientId", clientId);
         param.put("status", status);
@@ -45,6 +46,7 @@ public class OrderController {
         param.put("havingCount", havingCount);
         param.put("withSum", withSumParam);
         param.put("qtyGreaterThanAverage", qtyGreaterThanAverageParam);
+        param.put("minOrdersCount", minOrdersCount);
         model.addAttribute("param", param);
         model.addAttribute("orders", orders);
         model.addAttribute("clients", orderService.getAllClientsForFilter());

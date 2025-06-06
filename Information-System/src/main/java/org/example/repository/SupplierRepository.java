@@ -49,9 +49,17 @@ public class SupplierRepository implements ISupplierRepository {
         jdbcTemplate.update(sql, id);
     }
 
-    public List<java.util.Map<String, Object>> filterSuppliers(String name, String contact, String address) {
-        StringBuilder sql = new StringBuilder("SELECT s.id, s.name, s.contact, s.address FROM supplier s WHERE 1=1");
+    public List<java.util.Map<String, Object>> filterSuppliers(String name, String contact, String address, boolean includeNoProducts) {
+        StringBuilder sql = new StringBuilder();
         List<Object> params = new java.util.ArrayList<>();
+
+        if (includeNoProducts) {
+            sql.append("SELECT s.id, s.name, s.contact, s.address, p.id AS product_id, p.name AS product_name ");
+            sql.append("FROM product p RIGHT JOIN supplier s ON s.id = p.supplier_id WHERE 1=1");
+        } else {
+            sql.append("SELECT s.id, s.name, s.contact, s.address FROM supplier s WHERE 1=1");
+        }
+
         if (name != null && !name.isEmpty()) {
             sql.append(" AND s.name ILIKE ?");
             params.add("%" + name + "%");
@@ -64,7 +72,14 @@ public class SupplierRepository implements ISupplierRepository {
             sql.append(" AND s.address ILIKE ?");
             params.add("%" + address + "%");
         }
-        sql.append(" ORDER BY s.name");
+
+        // Add an ORDER BY clause, prioritizing supplier name, then product name if applicable
+        if (includeNoProducts) {
+            sql.append(" ORDER BY s.name, COALESCE(p.name, '')");
+        } else {
+            sql.append(" ORDER BY s.name");
+        }
+
         return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
 

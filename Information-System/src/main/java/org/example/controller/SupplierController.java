@@ -23,14 +23,18 @@ public class SupplierController {
     public String listSuppliers(Model model,
                                @RequestParam(value = "name", required = false) String name,
                                @RequestParam(value = "contact", required = false) String contact,
-                               @RequestParam(value = "address", required = false) String address) {
-        List<java.util.Map<String, Object>> suppliers = supplierService.filterSuppliers(name, contact, address);
+                               @RequestParam(value = "address", required = false) String address,
+                               @RequestParam(value = "includeNoProducts", required = false) String includeNoProductsParam) {
+        boolean includeNoProducts = includeNoProductsParam != null;
+        List<java.util.Map<String, Object>> suppliers = supplierService.filterSuppliers(name, contact, address, includeNoProducts);
         java.util.Map<String, String> param = new java.util.HashMap<>();
         param.put("name", name);
         param.put("contact", contact);
         param.put("address", address);
+        param.put("includeNoProducts", includeNoProductsParam);
         model.addAttribute("param", param);
         model.addAttribute("suppliers", suppliers);
+        model.addAttribute("includeNoProducts", includeNoProducts);
         return "suppliers";
     }
 

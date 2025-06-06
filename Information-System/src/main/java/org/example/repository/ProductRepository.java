@@ -89,11 +89,14 @@ public class ProductRepository implements IProductRepository {
             sql.append(" AND material_id = ?");
             params.add(Integer.parseInt(materialId));
         }
-        if (priceFrom != null && !priceFrom.isEmpty()) {
+        if (priceFrom != null && !priceFrom.isEmpty() && priceTo != null && !priceTo.isEmpty()) {
+            sql.append(" AND price BETWEEN ? AND ?");
+            params.add(Double.parseDouble(priceFrom));
+            params.add(Double.parseDouble(priceTo));
+        } else if (priceFrom != null && !priceFrom.isEmpty()) {
             sql.append(" AND price >= ?");
             params.add(Double.parseDouble(priceFrom));
-        }
-        if (priceTo != null && !priceTo.isEmpty()) {
+        } else if (priceTo != null && !priceTo.isEmpty()) {
             sql.append(" AND price <= ?");
             params.add(Double.parseDouble(priceTo));
         }
@@ -133,11 +136,14 @@ public class ProductRepository implements IProductRepository {
             sql.append(" AND material_id = ?");
             params.add(Integer.parseInt(materialId));
         }
-        if (priceFrom != null && !priceFrom.isEmpty()) {
+        if (priceFrom != null && !priceFrom.isEmpty() && priceTo != null && !priceTo.isEmpty()) {
+            sql.append(" AND price BETWEEN ? AND ?");
+            params.add(Double.parseDouble(priceFrom));
+            params.add(Double.parseDouble(priceTo));
+        } else if (priceFrom != null && !priceFrom.isEmpty()) {
             sql.append(" AND price >= ?");
             params.add(Double.parseDouble(priceFrom));
-        }
-        if (priceTo != null && !priceTo.isEmpty()) {
+        } else if (priceTo != null && !priceTo.isEmpty()) {
             sql.append(" AND price <= ?");
             params.add(Double.parseDouble(priceTo));
         }

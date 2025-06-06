@@ -9,5 +9,5 @@ public interface ISupplierRepository {
     List<Supplier> getAllSuppliers();
     void updateSupplier(Supplier supplier);
     void deleteSupplier(int id);
-    List<java.util.Map<String, Object>> filterSuppliers(String name, String contact, String address);
+    List<java.util.Map<String, Object>> filterSuppliers(String name, String contact, String address, boolean includeNoProducts);
 } 

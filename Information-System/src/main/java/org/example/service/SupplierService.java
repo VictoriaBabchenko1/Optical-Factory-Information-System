@@ -41,7 +41,8 @@ public class SupplierService implements ISupplierService {
         supplierRepository.deleteSupplier(id);
     }
 
-    public List<java.util.Map<String, Object>> filterSuppliers(String name, String contact, String address) {
-        return supplierRepository.filterSuppliers(name, contact, address);
+    @Override
+    public List<java.util.Map<String, Object>> filterSuppliers(String name, String contact, String address, boolean includeNoProducts) {
+        return supplierRepository.filterSuppliers(name, contact, address, includeNoProducts);
     }
 } 

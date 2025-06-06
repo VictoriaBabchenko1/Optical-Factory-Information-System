@@ -25,6 +25,9 @@
         <div class="col-md-3">
             <input type="number" class="form-control" name="havingCount" placeholder="HAVING к-сть замовлень ≥" th:value="${param.havingCount}">
         </div>
+        <div class="col-md-3">
+            <input type="number" class="form-control" name="minOrdersCount" placeholder="Клієнтів, які зробили ≥ N замовлень" th:value="${param.minOrdersCount}">
+        </div>
         <div class="col-md-12">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="groupBy" id="groupBy" th:checked="${param.groupBy}">
