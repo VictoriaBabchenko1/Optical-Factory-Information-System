@@ -9,4 +9,7 @@ public interface IShipmentRepository {
     List<Shipment> getAllShipments();
     void updateShipment(Shipment shipment);
     void deleteShipment(int id);
+    List<java.util.Map<String, Object>> filterShipments(String employeeId, String status, boolean groupBy, String havingCount);
+    List<java.util.Map<String, Object>> getAllEmployeesForFilter();
+    List<String> getAllStatuses();
 } 

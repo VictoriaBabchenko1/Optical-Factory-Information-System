@@ -9,10 +9,38 @@
 <div th:replace="fragments/menu :: menu"></div>
 <div class="container mt-5">
     <h1 class="mb-4">Відвантаження</h1>
-    <a href="/shipments/add" class="btn btn-primary mb-3">Додати відвантаження</a>
+    <form class="row g-3 mb-4" method="get" action="/shipments">
+        <div class="col-md-3">
+            <select class="form-select" name="employeeId">
+                <option value="">Співробітник</option>
+                <option th:each="e : ${employees}" th:value="${e['id']}" th:text="${e['name']}" th:selected="${param.employeeId} == ${e['id']}"></option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" name="status">
+                <option value="">Статус</option>
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${param.status} == ${s}"></option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="number" class="form-control" name="havingCount" placeholder="HAVING к-сть відвантажень ≥" th:value="${param.havingCount}">
+        </div>
+        <div class="col-md-12">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="groupBy" id="groupBy" th:checked="${param.groupBy}">
+                <label class="form-check-label" for="groupBy">Групувати по співробітнику та к-стю відвантажень</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
+        </div>
+        <div class="col-md-2">
+            <a href="/shipments" class="btn btn-secondary w-100">Очистити фільтри</a>
+        </div>
+    </form>
     <table class="table table-bordered table-striped shadow-lg">
         <thead>
-        <tr>
+        <tr th:if="${!groupBy}">
             <th>ID</th>
             <th>Замовлення</th>
             <th>Дата</th>
@@ -20,21 +48,32 @@
             <th>Статус</th>
             <th>Дії</th>
         </tr>
+        <tr th:if="${groupBy}">
+            <th>ID співробітника</th>
+            <th>Співробітник</th>
+            <th>Кількість відвантажень</th>
+        </tr>
         </thead>
         <tbody>
-        <tr th:each="shipment : ${shipments}">
-            <td th:text="${shipment.id}"></td>
-            <td th:text="${orderNumbers[shipment.orderId]}"></td>
-            <td th:text="${shipment.date}"></td>
-            <td th:text="${employeeNames[shipment.employeeId]}"></td>
-            <td th:text="${shipment.status}"></td>
+        <tr th:if="${!groupBy}" th:each="shipment : ${shipments}">
+            <td th:text="${shipment['id']}"></td>
+            <td th:text="${shipment['order_id']}"></td>
+            <td th:text="${shipment['date']}"></td>
+            <td th:text="${shipment['employee_id']}"></td>
+            <td th:text="${shipment['status']}"></td>
             <td>
-                <a th:href="@{'/shipments/edit/' + ${shipment.id}}" class="btn btn-warning btn-sm">Редагувати</a>
-                <a th:href="@{'/shipments/delete/' + ${shipment.id}}" class="btn btn-danger btn-sm">Видалити</a>
+                <a th:href="@{'/shipments/edit/' + ${shipment['id']}}" class="btn btn-warning btn-sm">Редагувати</a>
+                <a th:href="@{'/shipments/delete/' + ${shipment['id']}}" class="btn btn-danger btn-sm">Видалити</a>
             </td>
+        </tr>
+        <tr th:if="${groupBy}" th:each="row : ${shipments}">
+            <td th:text="${row['employee_id']}"></td>
+            <td th:text="${row['employee_name']}"></td>
+            <td th:text="${row['shipment_count']}"></td>
         </tr>
         </tbody>
     </table>
+    <a href="/shipments/add" class="btn btn-primary mt-3">Додати відвантаження</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

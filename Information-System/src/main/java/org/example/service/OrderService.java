@@ -56,4 +56,9 @@ public class OrderService implements IOrderService {
     public List<String> getAllStatuses() {
         return orderRepository.getAllStatuses();
     }
+
+    @Override
+    public List<java.util.Map<String, Object>> filterOrdersAdvanced(String clientId, String status, boolean groupBy, String havingCount, boolean withSum) {
+        return orderRepository.filterOrdersAdvanced(clientId, status, groupBy, havingCount, withSum);
+    }
 } 

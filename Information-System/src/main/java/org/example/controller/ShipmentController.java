@@ -28,13 +28,23 @@ public class ShipmentController {
     }
 
     @GetMapping
-    public String listShipments(Model model) {
-        List<Shipment> shipments = shipmentService.getAllShipments();
-        Map<Integer, String> orderNumbers = orderService.getAllOrders().stream().collect(Collectors.toMap(o -> o.getId(), o -> String.valueOf(o.getId())));
-        Map<Integer, String> employeeNames = employeeService.getAllEmployees().stream().collect(Collectors.toMap(e -> e.getId(), e -> e.getName()));
+    public String listShipments(Model model,
+                               @RequestParam(value = "employeeId", required = false) String employeeId,
+                               @RequestParam(value = "status", required = false) String status,
+                               @RequestParam(value = "groupBy", required = false) String groupByParam,
+                               @RequestParam(value = "havingCount", required = false) String havingCount) {
+        boolean groupBy = groupByParam != null;
+        List<java.util.Map<String, Object>> shipments = shipmentService.filterShipments(employeeId, status, groupBy, havingCount);
+        java.util.Map<String, String> param = new java.util.HashMap<>();
+        param.put("employeeId", employeeId);
+        param.put("status", status);
+        param.put("groupBy", groupByParam);
+        param.put("havingCount", havingCount);
+        model.addAttribute("param", param);
         model.addAttribute("shipments", shipments);
-        model.addAttribute("orderNumbers", orderNumbers);
-        model.addAttribute("employeeNames", employeeNames);
+        model.addAttribute("employees", shipmentService.getAllEmployeesForFilter());
+        model.addAttribute("statuses", shipmentService.getAllStatuses());
+        model.addAttribute("groupBy", groupBy);
         return "shipments";
     }
 

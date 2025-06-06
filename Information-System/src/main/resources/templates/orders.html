@@ -22,10 +22,17 @@
                 <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${param.status} == ${s}"></option>
             </select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <input type="number" class="form-control" name="havingCount" placeholder="HAVING к-сть замовлень ≥" th:value="${param.havingCount}">
+        </div>
+        <div class="col-md-12">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="withItems" id="withItems" th:checked="${param.withItems}">
-                <label class="form-check-label" for="withItems">Лише замовлення з позиціями (EXISTS)</label>
+                <input class="form-check-input" type="checkbox" name="groupBy" id="groupBy" th:checked="${param.groupBy}">
+                <label class="form-check-label" for="groupBy">Групувати по клієнту та Кількістю замовлень</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="withSum" id="withSum" th:checked="${param.withSum}">
+                <label class="form-check-label" for="withSum">Показати суму по замовленнях</label>
             </div>
         </div>
         <div class="col-md-2">
@@ -37,16 +44,22 @@
     </form>
     <table class="table table-bordered table-striped shadow-lg">
         <thead>
-        <tr>
+        <tr th:if="${!groupBy}">
             <th>ID</th>
             <th>Клієнт</th>
             <th>Дата</th>
             <th>Статус</th>
             <th>Дії</th>
         </tr>
+        <tr th:if="${groupBy}">
+            <th>ID клієнта</th>
+            <th>Клієнт</th>
+            <th>Кількість замовлень</th>
+            <th th:if="${withSum}">Сума по замовленнях</th>
+        </tr>
         </thead>
         <tbody>
-        <tr th:each="order : ${orders}">
+        <tr th:if="${!groupBy}" th:each="order : ${orders}">
             <td th:text="${order['id']}"></td>
             <td th:text="${order['client_id']}"></td>
             <td th:text="${order['date']}"></td>
@@ -55,6 +68,12 @@
                 <a th:href="@{'/orders/edit/' + ${order['id']}}" class="btn btn-warning btn-sm">Редагувати</a>
                 <a th:href="@{'/orders/delete/' + ${order['id']}}" class="btn btn-danger btn-sm">Видалити</a>
             </td>
+        </tr>
+        <tr th:if="${groupBy}" th:each="row : ${orders}">
+            <td th:text="${row['client_id']}"></td>
+            <td th:text="${row['client_name']}"></td>
+            <td th:text="${row['order_count']}"></td>
+            <td th:if="${withSum}" th:text="${row['total_sum']}"></td>
         </tr>
         </tbody>
     </table>

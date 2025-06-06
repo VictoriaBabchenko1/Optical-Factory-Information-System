@@ -81,6 +81,38 @@ public class OrderRepository implements IOrderRepository {
         return jdbcTemplate.queryForList(sql, String.class);
     }
 
+    @Override
+    public List<java.util.Map<String, Object>> filterOrdersAdvanced(String clientId, String status, boolean groupBy, String havingCount, boolean withSum) {
+        StringBuilder sql = new StringBuilder();
+        List<Object> params = new java.util.ArrayList<>();
+        if (groupBy) {
+            if (withSum) {
+                sql.append("SELECT o.client_id, c.name as client_name, COUNT(o.id) as order_count, SUM(oi.price * oi.quantity) as total_sum FROM \"order\" o LEFT JOIN client c ON o.client_id = c.id LEFT JOIN order_item oi ON o.id = oi.order_id WHERE 1=1");
+            } else {
+                sql.append("SELECT o.client_id, c.name as client_name, COUNT(o.id) as order_count FROM \"order\" o LEFT JOIN client c ON o.client_id = c.id WHERE 1=1");
+            }
+        } else {
+            sql.append("SELECT o.* FROM \"order\" o WHERE 1=1");
+        }
+        if (clientId != null && !clientId.isEmpty()) {
+            sql.append(" AND o.client_id = ?");
+            params.add(Integer.parseInt(clientId));
+        }
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND o.status = ?");
+            params.add(status);
+        }
+        if (groupBy) {
+            sql.append(" GROUP BY o.client_id, c.name");
+            if (havingCount != null && !havingCount.isEmpty()) {
+                sql.append(" HAVING COUNT(o.id) >= ?");
+                params.add(Integer.parseInt(havingCount));
+            }
+        }
+        sql.append(" ORDER BY o.client_id");
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
+    }
+
     private static class OrderRowMapper implements RowMapper<Order> {
         @Override
         public Order mapRow(ResultSet rs, int rowNum) throws SQLException {

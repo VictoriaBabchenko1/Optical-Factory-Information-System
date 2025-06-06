@@ -30,17 +30,24 @@ public class OrderController {
     public String listOrders(Model model,
                             @RequestParam(value = "clientId", required = false) String clientId,
                             @RequestParam(value = "status", required = false) String status,
-                            @RequestParam(value = "withItems", required = false) String withItemsParam) {
-        boolean withItems = withItemsParam != null;
-        List<Map<String, Object>> orders = orderService.filterOrders(clientId, status, withItems);
+                            @RequestParam(value = "groupBy", required = false) String groupByParam,
+                            @RequestParam(value = "havingCount", required = false) String havingCount,
+                            @RequestParam(value = "withSum", required = false) String withSumParam) {
+        boolean groupBy = groupByParam != null;
+        boolean withSum = withSumParam != null;
+        List<java.util.Map<String, Object>> orders = orderService.filterOrdersAdvanced(clientId, status, groupBy, havingCount, withSum);
+        java.util.Map<String, String> param = new java.util.HashMap<>();
+        param.put("clientId", clientId);
+        param.put("status", status);
+        param.put("groupBy", groupByParam);
+        param.put("havingCount", havingCount);
+        param.put("withSum", withSumParam);
+        model.addAttribute("param", param);
         model.addAttribute("orders", orders);
         model.addAttribute("clients", orderService.getAllClientsForFilter());
         model.addAttribute("statuses", orderService.getAllStatuses());
-        Map<String, String> param = new HashMap<>();
-        param.put("clientId", clientId);
-        param.put("status", status);
-        param.put("withItems", withItems ? "on" : "");
-        model.addAttribute("param", param);
+        model.addAttribute("groupBy", groupBy);
+        model.addAttribute("withSum", withSum);
         return "orders";
     }
 

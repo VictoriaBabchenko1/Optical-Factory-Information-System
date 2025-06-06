@@ -49,6 +49,45 @@ public class ShipmentRepository implements IShipmentRepository {
         jdbcTemplate.update(sql, id);
     }
 
+    public List<java.util.Map<String, Object>> filterShipments(String employeeId, String status, boolean groupBy, String havingCount) {
+        StringBuilder sql = new StringBuilder();
+        List<Object> params = new java.util.ArrayList<>();
+        if (groupBy) {
+            sql.append("SELECT s.employee_id, e.name as employee_name, COUNT(s.id) as shipment_count FROM shipment s LEFT JOIN employee e ON s.employee_id = e.id WHERE 1=1");
+        } else {
+            sql.append("SELECT s.* FROM shipment s WHERE 1=1");
+        }
+        if (employeeId != null && !employeeId.isEmpty()) {
+            sql.append(" AND s.employee_id = ?");
+            params.add(Integer.parseInt(employeeId));
+        }
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND s.status = ?");
+            params.add(status);
+        }
+        if (groupBy) {
+            sql.append(" GROUP BY s.employee_id, e.name");
+            if (havingCount != null && !havingCount.isEmpty()) {
+                sql.append(" HAVING COUNT(s.id) >= ?");
+                params.add(Integer.parseInt(havingCount));
+            }
+        }
+        sql.append(" ORDER BY s.employee_id");
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
+    }
+
+    @Override
+    public List<java.util.Map<String, Object>> getAllEmployeesForFilter() {
+        String sql = "SELECT id, name FROM employee ORDER BY name";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    @Override
+    public List<String> getAllStatuses() {
+        String sql = "SELECT DISTINCT status FROM shipment ORDER BY status";
+        return jdbcTemplate.queryForList(sql, String.class);
+    }
+
     private static class ShipmentRowMapper implements RowMapper<Shipment> {
         @Override
         public Shipment mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -40,4 +40,18 @@ public class ShipmentService implements IShipmentService {
     public void deleteShipment(int id) {
         shipmentRepository.deleteShipment(id);
     }
+
+    public List<java.util.Map<String, Object>> filterShipments(String employeeId, String status, boolean groupBy, String havingCount) {
+        return shipmentRepository.filterShipments(employeeId, status, groupBy, havingCount);
+    }
+
+    @Override
+    public List<java.util.Map<String, Object>> getAllEmployeesForFilter() {
+        return shipmentRepository.getAllEmployeesForFilter();
+    }
+
+    @Override
+    public List<String> getAllStatuses() {
+        return shipmentRepository.getAllStatuses();
+    }
 } 
