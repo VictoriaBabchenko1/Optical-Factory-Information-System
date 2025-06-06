@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmployeeService implements IEmployeeService {
@@ -29,6 +30,15 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public List<Employee> getAllEmployees() {
         return employeeRepository.getAllEmployees();
+    }
+
+    @Override
+    public List<Map<String, Object>> filterEmployees(
+            String searchTerm,
+            boolean groupProductionCount,
+            Integer minProductionCount
+    ) {
+        return employeeRepository.filterEmployees(searchTerm, groupProductionCount, minProductionCount);
     }
 
     @Override

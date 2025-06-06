@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WarehouseService implements IWarehouseService {
@@ -29,6 +30,11 @@ public class WarehouseService implements IWarehouseService {
     @Override
     public List<Warehouse> getAllWarehouses() {
         return warehouseRepository.getAllWarehouses();
+    }
+
+    @Override
+    public List<Map<String, Object>> filterWarehouses(boolean groupProducts) {
+        return warehouseRepository.filterWarehouses(groupProducts);
     }
 
     @Override

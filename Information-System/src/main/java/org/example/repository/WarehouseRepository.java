@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class WarehouseRepository implements IWarehouseRepository {
@@ -35,6 +36,20 @@ public class WarehouseRepository implements IWarehouseRepository {
     public List<Warehouse> getAllWarehouses() {
         String sql = "SELECT * FROM warehouse";
         return jdbcTemplate.query(sql, new WarehouseRowMapper());
+    }
+
+    @Override
+    public List<Map<String, Object>> filterWarehouses(boolean groupProducts) {
+        StringBuilder sql = new StringBuilder();
+        if (groupProducts) {
+            sql.append("SELECT w.id, w.name, w.address, COUNT(p.id) AS product_count ");
+            sql.append("FROM warehouse w LEFT JOIN product p ON w.id = p.warehouse_id ");
+            sql.append("GROUP BY w.id, w.name, w.address");
+            return jdbcTemplate.queryForList(sql.toString());
+        } else {
+            sql.append("SELECT id, name, address FROM warehouse");
+            return jdbcTemplate.queryForList(sql.toString());
+        }
     }
 
     @Override

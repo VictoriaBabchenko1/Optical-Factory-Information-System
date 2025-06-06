@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
 
 @Repository
 public class EmployeeRepository implements IEmployeeRepository {
@@ -35,6 +37,40 @@ public class EmployeeRepository implements IEmployeeRepository {
     public List<Employee> getAllEmployees() {
         String sql = "SELECT * FROM employee";
         return jdbcTemplate.query(sql, new EmployeeRowMapper());
+    }
+
+    @Override
+    public List<Map<String, Object>> filterEmployees(
+            String searchTerm,
+            boolean groupProductionCount,
+            Integer minProductionCount
+    ) {
+        StringBuilder sql = new StringBuilder();
+        List<Object> args = new ArrayList<>();
+
+        if (groupProductionCount) {
+            sql.append("SELECT e.id, e.name, e.position, e.contact, COUNT(p.id) AS production_count ");
+            sql.append("FROM employee e LEFT JOIN production p ON e.id = p.employee_id ");
+            sql.append("WHERE 1=1 ");
+        } else {
+            sql.append("SELECT id, name, position, contact FROM employee WHERE 1=1 ");
+        }
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            sql.append("AND (name ILIKE ? OR position ILIKE ?) ");
+            args.add("%" + searchTerm + "%");
+            args.add("%" + searchTerm + "%");
+        }
+
+        if (groupProductionCount) {
+            sql.append("GROUP BY e.id, e.name, e.position, e.contact ");
+            if (minProductionCount != null) {
+                sql.append("HAVING COUNT(p.id) >= ? ");
+                args.add(minProductionCount);
+            }
+        }
+
+        return jdbcTemplate.queryForList(sql.toString(), args.toArray());
     }
 
     @Override

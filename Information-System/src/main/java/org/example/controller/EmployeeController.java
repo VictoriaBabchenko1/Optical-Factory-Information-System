@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/employees")
@@ -20,9 +21,18 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public String listEmployees(Model model) {
-        List<Employee> employees = employeeService.getAllEmployees();
+    public String listEmployees(
+            @RequestParam(value = "searchTerm", required = false) String searchTerm,
+            @RequestParam(value = "groupProductionCount", defaultValue = "false") boolean groupProductionCount,
+            @RequestParam(value = "minProductionCount", required = false) Integer minProductionCount,
+            Model model) {
+        List<Map<String, Object>> employees = employeeService.filterEmployees(
+                searchTerm, groupProductionCount, minProductionCount
+        );
         model.addAttribute("employees", employees);
+        model.addAttribute("searchTerm", searchTerm);
+        model.addAttribute("groupProductionCount", groupProductionCount);
+        model.addAttribute("minProductionCount", minProductionCount);
         return "employees";
     }
 
