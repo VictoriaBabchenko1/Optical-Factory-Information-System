@@ -49,7 +49,7 @@ public class ClientRepository implements IClientRepository {
         jdbcTemplate.update(sql, id);
     }
 
-    public List<java.util.Map<String, Object>> filterClients(String name, String contact, String address, boolean withProcessingOrders, boolean groupBy, String havingCount) {
+    public List<java.util.Map<String, Object>> filterClients(String name, String contact, String address, boolean withProcessingOrders, boolean groupBy, String havingCount, String sortOrder) {
         StringBuilder sql = new StringBuilder();
         List<Object> params = new java.util.ArrayList<>();
         if (groupBy) {
@@ -82,8 +82,12 @@ public class ClientRepository implements IClientRepository {
                 sql.append(" HAVING COUNT(o.id) >= ?");
                 params.add(Integer.parseInt(havingCount));
             }
+            if (sortOrder != null && !sortOrder.isEmpty()) {
+                sql.append(" ORDER BY order_count ").append(sortOrder);
+            }
+        } else {
+            sql.append(" ORDER BY c.name");
         }
-        sql.append(" ORDER BY c.name");
         return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
 

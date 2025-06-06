@@ -26,10 +26,11 @@ public class ClientController {
                              @RequestParam(value = "address", required = false) String address,
                              @RequestParam(value = "withProcessingOrders", required = false) String withProcessingOrdersParam,
                              @RequestParam(value = "groupBy", required = false) String groupByParam,
-                             @RequestParam(value = "havingCount", required = false) String havingCount) {
+                             @RequestParam(value = "havingCount", required = false) String havingCount,
+                             @RequestParam(value = "sortOrder", required = false) String sortOrder) {
         boolean withProcessingOrders = withProcessingOrdersParam != null;
         boolean groupBy = groupByParam != null;
-        List<java.util.Map<String, Object>> clients = clientService.filterClients(name, contact, address, withProcessingOrders, groupBy, havingCount);
+        List<java.util.Map<String, Object>> clients = clientService.filterClients(name, contact, address, withProcessingOrders, groupBy, havingCount, sortOrder);
         java.util.Map<String, String> param = new java.util.HashMap<>();
         param.put("name", name);
         param.put("contact", contact);
@@ -37,6 +38,7 @@ public class ClientController {
         param.put("withProcessingOrders", withProcessingOrdersParam);
         param.put("groupBy", groupByParam);
         param.put("havingCount", havingCount);
+        param.put("sortOrder", sortOrder);
         model.addAttribute("param", param);
         model.addAttribute("clients", clients);
         model.addAttribute("groupBy", groupBy);

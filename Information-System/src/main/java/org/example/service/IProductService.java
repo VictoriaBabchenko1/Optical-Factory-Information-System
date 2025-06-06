@@ -12,4 +12,5 @@ public interface IProductService {
     void deleteProduct(int id);
     List<Map<String, Object>> filterProducts(String name, String categoryId, String materialId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, String sort, boolean uniqueCategories, boolean inOrders, boolean withCategory, boolean maxPrice);
     Map<String, Object> getAggregates(String name, String categoryId, String materialId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, boolean uniqueCategories, boolean inOrders, boolean withCategory, boolean maxPrice);
+    List<String> getUniqueMaterialNames();
 } 

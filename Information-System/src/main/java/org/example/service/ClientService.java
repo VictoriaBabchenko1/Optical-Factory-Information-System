@@ -41,7 +41,7 @@ public class ClientService implements IClientService {
         clientRepository.deleteClient(id);
     }
 
-    public List<java.util.Map<String, Object>> filterClients(String name, String contact, String address, boolean withProcessingOrders, boolean groupBy, String havingCount) {
-        return clientRepository.filterClients(name, contact, address, withProcessingOrders, groupBy, havingCount);
+    public List<java.util.Map<String, Object>> filterClients(String name, String contact, String address, boolean withProcessingOrders, boolean groupBy, String havingCount, String sortOrder) {
+        return clientRepository.filterClients(name, contact, address, withProcessingOrders, groupBy, havingCount, sortOrder);
     }
 } 

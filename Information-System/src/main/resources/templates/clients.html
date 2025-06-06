@@ -35,6 +35,13 @@
                 <label class="form-check-label" for="groupBy">Групувати за к-стю замовлень</label>
             </div>
         </div>
+        <div class="col-md-3" th:if="${groupBy}">
+            <select class="form-select" name="sortOrder">
+                <option value="">Сортувати за к-стю замовлень</option>
+                <option value="ASC" th:selected="${param.sortOrder} == 'ASC'">За зростанням</option>
+                <option value="DESC" th:selected="${param.sortOrder} == 'DESC'">За спаданням</option>
+            </select>
+        </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
         </div>

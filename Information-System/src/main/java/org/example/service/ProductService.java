@@ -51,4 +51,9 @@ public class ProductService implements IProductService {
     public Map<String, Object> getAggregates(String name, String categoryId, String materialId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, boolean uniqueCategories, boolean inOrders, boolean withCategory, boolean maxPrice) {
         return productRepository.getAggregates(name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, uniqueCategories, inOrders, withCategory, maxPrice);
     }
+
+    @Override
+    public List<String> getUniqueMaterialNames() {
+        return productRepository.getUniqueMaterialNames();
+    }
 } 

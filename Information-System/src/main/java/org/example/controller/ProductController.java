@@ -47,17 +47,27 @@ public class ProductController {
             @RequestParam(value = "uniqueCategories", required = false) String uniqueCategoriesParam,
             @RequestParam(value = "inOrders", required = false) String inOrdersParam,
             @RequestParam(value = "withCategory", required = false) String withCategoryParam,
-            @RequestParam(value = "maxPrice", required = false) String maxPriceParam
+            @RequestParam(value = "maxPrice", required = false) String maxPriceParam,
+            @RequestParam(value = "showUniqueMaterials", required = false) String showUniqueMaterialsParam
     ) {
         boolean showAggregates = showAggregatesParam != null;
         boolean uniqueCategories = uniqueCategoriesParam != null;
         boolean inOrders = inOrdersParam != null;
         boolean withCategory = withCategoryParam != null;
         boolean maxPrice = maxPriceParam != null;
+        boolean showUniqueMaterials = showUniqueMaterialsParam != null;
 
-        List<Map<String, Object>> products = productService.filterProducts(
-            name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, sort, uniqueCategories, inOrders, withCategory, maxPrice
-        );
+        List<Map<String, Object>> products = null;
+        List<String> uniqueMaterials = null;
+
+        if (showUniqueMaterials) {
+            uniqueMaterials = productService.getUniqueMaterialNames();
+        } else {
+            products = productService.filterProducts(
+                name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, sort, uniqueCategories, inOrders, withCategory, maxPrice
+            );
+        }
+
         Map<Integer, String> categoryNames = categoryService.getAllCategories().stream().collect(Collectors.toMap(ProductCategory::getId, ProductCategory::getName));
         Map<Integer, String> materialNames = materialService.getAllMaterials().stream().collect(Collectors.toMap(Material::getId, Material::getName));
         model.addAttribute("products", products);
@@ -79,12 +89,17 @@ public class ProductController {
         param.put("inOrders", inOrders ? "on" : "");
         param.put("withCategory", withCategory ? "on" : "");
         param.put("maxPrice", maxPrice ? "on" : "");
+        param.put("showUniqueMaterials", showUniqueMaterials ? "on" : "");
         model.addAttribute("param", param);
         model.addAttribute("showAggregates", showAggregates);
+        model.addAttribute("showUniqueMaterials", showUniqueMaterials);
         if (showAggregates) {
             model.addAttribute("aggregates", productService.getAggregates(
                 name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, uniqueCategories, inOrders, withCategory, maxPrice
             ));
+        }
+        if (showUniqueMaterials) {
+            model.addAttribute("uniqueMaterials", uniqueMaterials);
         }
         return "products";
     }

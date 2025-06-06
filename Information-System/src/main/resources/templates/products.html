@@ -62,6 +62,10 @@
                 <input class="form-check-input" type="checkbox" name="maxPrice" id="maxPrice" th:checked="${param.maxPrice}">
                 <label class="form-check-label" for="maxPrice">Ціна = MAX</label>
             </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="showUniqueMaterials" id="showUniqueMaterials" th:checked="${param.showUniqueMaterials}">
+                <label class="form-check-label" for="showUniqueMaterials">Показати матеріали продуктів</label>
+            </div>
         </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
@@ -81,7 +85,17 @@
             </div>
         </div>
     </div>
-    <table class="table table-bordered table-striped shadow-lg">
+
+    <div th:if="${uniqueMaterials != null and !uniqueMaterials.isEmpty()}" class="mb-4">
+        <div class="card card-body bg-light shadow-sm">
+            <h4>Матеріали продуктів:</h4>
+            <ul class="list-group">
+                <li class="list-group-item" th:each="materialName : ${uniqueMaterials}" th:text="${materialName}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <table th:unless="${uniqueMaterials != null and !uniqueMaterials.isEmpty()}" class="table table-bordered table-striped shadow-lg">
         <thead>
         <tr>
             <th>ID</th>

@@ -158,6 +158,12 @@ public class ProductRepository implements IProductRepository {
         return jdbcTemplate.queryForMap(sql.toString(), params.toArray());
     }
 
+    @Override
+    public List<String> getUniqueMaterialNames() {
+        String sql = "SELECT DISTINCT m.name FROM product p JOIN material m ON p.material_id = m.id";
+        return jdbcTemplate.queryForList(sql, String.class);
+    }
+
     private static class ProductRowMapper implements RowMapper<Product> {
         @Override
         public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
