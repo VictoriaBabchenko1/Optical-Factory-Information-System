@@ -47,10 +47,6 @@
         </div>
         <div class="col-md-12">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="showAggregates" id="showAggregates" th:checked="${param.showAggregates}">
-                <label class="form-check-label" for="showAggregates">Показати агрегати</label>
-            </div>
-            <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="inOrders" id="inOrders" th:checked="${param.inOrders}">
                 <label class="form-check-label" for="inOrders">Є у замовленнях</label>
             </div>
@@ -66,6 +62,10 @@
                 <input class="form-check-input" type="checkbox" name="showUniqueMaterials" id="showUniqueMaterials" th:checked="${param.showUniqueMaterials}">
                 <label class="form-check-label" for="showUniqueMaterials">Показати матеріали продуктів</label>
             </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="showAggregates" id="showAggregates" th:checked="${param.showAggregates}">
+                <label class="form-check-label" for="showAggregates">Показати аналітичні підсумки</label>
+            </div>
         </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>
@@ -75,7 +75,7 @@
         </div>
     </form>
     <div th:if="${showAggregates}" class="mb-4">
-        <div class="card card-body bg-light shadow-sm">
+        <div class="alert alert-info">
             <div class="row">
                 <div class="col"><b>Мін. ціна:</b> <span th:text="${aggregates.minPrice}"></span></div>
                 <div class="col"><b>Макс. ціна:</b> <span th:text="${aggregates.maxPrice}"></span></div>

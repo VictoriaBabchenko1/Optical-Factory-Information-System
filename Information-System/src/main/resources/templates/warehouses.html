@@ -11,7 +11,7 @@
     <h1 class="mb-4">Склади</h1>
 
     <form th:action="@{/warehouses}" method="get" class="mb-4">
-        <div class="row g-3">
+        <div class="row g-3 align-items-end">
             <div class="col-md-4">
                 <label for="materialName" class="form-label">Матеріал продукту:</label>
                 <select class="form-select" id="materialName" name="materialName" th:value="${materialName}">
@@ -19,7 +19,7 @@
                     <option th:each="material : ${materials}" th:value="${material.name}" th:text="${material.name}" th:selected="${materialName} == ${material.name}"></option>
                 </select>
             </div>
-            <div class="col-md-4 d-flex align-items-center">
+            <div class="col-md-4 d-flex align-items-end">
                 <div class="form-check">
                     <input type="checkbox" id="hasProductsWithMaterial" name="hasProductsWithMaterial" class="form-check-input" th:checked="${hasProductsWithMaterial}">
                     <label class="form-check-label" for="hasProductsWithMaterial">Склади з продуктами цього матеріалу</label>

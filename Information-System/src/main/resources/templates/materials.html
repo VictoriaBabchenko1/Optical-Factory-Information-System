@@ -37,11 +37,11 @@
         <div class="col-md-12">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="inProducts" id="inProducts" th:checked="${param.inProducts}">
-                <label class="form-check-label" for="inProducts">Є у продуктах (IN)</label>
+                <label class="form-check-label" for="inProducts">Є у продуктах</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" name="showAggregates" id="showAggregates" th:checked="${param.showAggregates}">
-                <label class="form-check-label" for="showAggregates">Показати агрегати</label>
+                <label class="form-check-label" for="showAggregates">Показати аналітичні підсумки</label>
             </div>
         </div>
         <div class="col-md-2">
@@ -53,11 +53,11 @@
     </form>
     <div th:if="${aggregates != null}">
         <div class="alert alert-info">
-            <b>MIN:</b> <span th:text="${aggregates['minPrice']}"></span>,
-            <b>MAX:</b> <span th:text="${aggregates['maxPrice']}"></span>,
-            <b>AVG:</b> <span th:text="${aggregates['avgPrice']}"></span>,
-            <b>SUM:</b> <span th:text="${aggregates['sumPrice']}"></span>,
-            <b>COUNT:</b> <span th:text="${aggregates['count']}"></span>
+            <b>Мін. ціна:</b> <span th:text="${aggregates['minPrice']}"></span>,
+            <b>Макс. ціна:</b> <span th:text="${aggregates['maxPrice']}"></span>,
+            <b>Cередня ціна:</b> <span th:text="${aggregates['avgPrice']}"></span>,
+            <b>Сума цін:</b> <span th:text="${aggregates['sumPrice']}"></span>,
+            <b>Кількість матеріалів:</b> <span th:text="${aggregates['count']}"></span>
         </div>
     </div>
     <table class="table table-bordered table-striped shadow-lg">
