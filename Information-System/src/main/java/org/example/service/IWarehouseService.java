@@ -10,5 +10,5 @@ public interface IWarehouseService {
     List<Warehouse> getAllWarehouses();
     void updateWarehouse(Warehouse warehouse);
     void deleteWarehouse(int id);
-    List<Map<String, Object>> filterWarehouses(boolean groupProducts);
+    List<Map<String, Object>> filterWarehouses(boolean groupProducts, String materialName, boolean hasProductsWithMaterial);
 } 

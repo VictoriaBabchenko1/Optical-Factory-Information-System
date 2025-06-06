@@ -13,5 +13,5 @@ public interface IOrderService {
     List<Map<String, Object>> filterOrders(String clientId, String status, boolean withItems);
     List<Map<String, Object>> getAllClientsForFilter();
     List<String> getAllStatuses();
-    List<java.util.Map<String, Object>> filterOrdersAdvanced(String clientId, String status, boolean groupBy, String havingCount, boolean withSum);
+    List<java.util.Map<String, Object>> filterOrdersAdvanced(String clientId, String status, boolean groupBy, String havingCount, boolean withSum, boolean qtyGreaterThanAverage);
 } 

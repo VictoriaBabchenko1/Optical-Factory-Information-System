@@ -39,17 +39,28 @@ public class WarehouseRepository implements IWarehouseRepository {
     }
 
     @Override
-    public List<Map<String, Object>> filterWarehouses(boolean groupProducts) {
+    public List<Map<String, Object>> filterWarehouses(boolean groupProducts, String materialName, boolean hasProductsWithMaterial) {
         StringBuilder sql = new StringBuilder();
+        List<Object> params = new java.util.ArrayList<>();
+
         if (groupProducts) {
             sql.append("SELECT w.id, w.name, w.address, COUNT(p.id) AS product_count ");
             sql.append("FROM warehouse w LEFT JOIN product p ON w.id = p.warehouse_id ");
-            sql.append("GROUP BY w.id, w.name, w.address");
-            return jdbcTemplate.queryForList(sql.toString());
+            sql.append("WHERE 1=1 ");
         } else {
-            sql.append("SELECT id, name, address FROM warehouse");
-            return jdbcTemplate.queryForList(sql.toString());
+            sql.append("SELECT id, name, address FROM warehouse WHERE 1=1 ");
         }
+
+        if (hasProductsWithMaterial && materialName != null && !materialName.isEmpty()) {
+            sql.append(" AND id IN (SELECT p.warehouse_id FROM product p JOIN material m ON p.material_id = m.id WHERE m.name = ?)");
+            params.add(materialName);
+        }
+
+        if (groupProducts) {
+            sql.append(" GROUP BY w.id, w.name, w.address");
+        }
+
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
 
     @Override

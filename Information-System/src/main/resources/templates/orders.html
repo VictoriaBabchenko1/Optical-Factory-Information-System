@@ -34,6 +34,10 @@
                 <input class="form-check-input" type="checkbox" name="withSum" id="withSum" th:checked="${param.withSum}">
                 <label class="form-check-label" for="withSum">Показати суму по замовленнях</label>
             </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="qtyGreaterThanAverage" id="qtyGreaterThanAverage" th:checked="${param.qtyGreaterThanAverage}">
+                <label class="form-check-label" for="qtyGreaterThanAverage">Замовлення з к-стю товарів більшою за середню</label>
+            </div>
         </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Застосувати фільтр</button>

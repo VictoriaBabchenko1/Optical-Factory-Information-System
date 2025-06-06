@@ -1,7 +1,9 @@
 package org.example.controller;
 
 import org.example.model.Warehouse;
+import org.example.model.Material;
 import org.example.service.IWarehouseService;
+import org.example.service.IMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,24 +16,30 @@ import java.util.Map;
 @RequestMapping("/warehouses")
 public class WarehouseController {
     private final IWarehouseService warehouseService;
+    private final IMaterialService materialService;
 
     @Autowired
-    public WarehouseController(IWarehouseService warehouseService) {
+    public WarehouseController(IWarehouseService warehouseService, IMaterialService materialService) {
         this.warehouseService = warehouseService;
+        this.materialService = materialService;
     }
 
     @GetMapping
     public String listWarehouses(
             @RequestParam(value = "groupProducts", defaultValue = "false") boolean groupProducts,
+            @RequestParam(value = "materialName", required = false) String materialName,
+            @RequestParam(value = "hasProductsWithMaterial", defaultValue = "false") boolean hasProductsWithMaterial,
             Model model) {
         List<Map<String, Object>> warehouses;
-        if (groupProducts) {
-            warehouses = warehouseService.filterWarehouses(true);
-        } else {
-            warehouses = warehouseService.filterWarehouses(false);
-        }
+        List<Material> materials = materialService.getAllMaterials();
+
+        warehouses = warehouseService.filterWarehouses(groupProducts, materialName, hasProductsWithMaterial);
+
         model.addAttribute("warehouses", warehouses);
         model.addAttribute("groupProducts", groupProducts);
+        model.addAttribute("materials", materials);
+        model.addAttribute("materialName", materialName);
+        model.addAttribute("hasProductsWithMaterial", hasProductsWithMaterial);
         return "warehouses";
     }
 

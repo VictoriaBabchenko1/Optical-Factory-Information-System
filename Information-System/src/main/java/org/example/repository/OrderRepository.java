@@ -82,7 +82,7 @@ public class OrderRepository implements IOrderRepository {
     }
 
     @Override
-    public List<java.util.Map<String, Object>> filterOrdersAdvanced(String clientId, String status, boolean groupBy, String havingCount, boolean withSum) {
+    public List<java.util.Map<String, Object>> filterOrdersAdvanced(String clientId, String status, boolean groupBy, String havingCount, boolean withSum, boolean qtyGreaterThanAverage) {
         StringBuilder sql = new StringBuilder();
         List<Object> params = new java.util.ArrayList<>();
         if (groupBy) {
@@ -101,6 +101,9 @@ public class OrderRepository implements IOrderRepository {
         if (status != null && !status.isEmpty()) {
             sql.append(" AND o.status = ?");
             params.add(status);
+        }
+        if (qtyGreaterThanAverage) {
+            sql.append(" AND o.id IN (SELECT order_id FROM order_item GROUP BY order_id HAVING SUM(quantity) > (SELECT AVG(quantity) FROM order_item))");
         }
         if (groupBy) {
             sql.append(" GROUP BY o.client_id, c.name");

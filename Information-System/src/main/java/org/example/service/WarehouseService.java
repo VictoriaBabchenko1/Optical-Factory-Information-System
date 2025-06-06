@@ -33,8 +33,8 @@ public class WarehouseService implements IWarehouseService {
     }
 
     @Override
-    public List<Map<String, Object>> filterWarehouses(boolean groupProducts) {
-        return warehouseRepository.filterWarehouses(groupProducts);
+    public List<Map<String, Object>> filterWarehouses(boolean groupProducts, String materialName, boolean hasProductsWithMaterial) {
+        return warehouseRepository.filterWarehouses(groupProducts, materialName, hasProductsWithMaterial);
     }
 
     @Override
