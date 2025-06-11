@@ -54,8 +54,10 @@ public class SupplierRepository implements ISupplierRepository {
         List<Object> params = new java.util.ArrayList<>();
 
         if (includeNoProducts) {
-            sql.append("SELECT s.id, s.name, s.contact, s.address, p.id AS product_id, p.name AS product_name ");
-            sql.append("FROM product p RIGHT JOIN supplier s ON s.id = p.supplier_id WHERE 1=1");
+            sql.append("SELECT s.id, s.name, s.contact, s.address FROM supplier s ");
+            sql.append("LEFT JOIN material m ON s.id = m.supplier_id ");
+            sql.append("LEFT JOIN product p ON m.id = p.material_id ");
+            sql.append("WHERE p.id IS NULL");
         } else {
             sql.append("SELECT s.id, s.name, s.contact, s.address FROM supplier s WHERE 1=1");
         }
@@ -73,12 +75,7 @@ public class SupplierRepository implements ISupplierRepository {
             params.add("%" + address + "%");
         }
 
-        // Add an ORDER BY clause, prioritizing supplier name, then product name if applicable
-        if (includeNoProducts) {
-            sql.append(" ORDER BY s.name, COALESCE(p.name, '')");
-        } else {
-            sql.append(" ORDER BY s.name");
-        }
+        sql.append(" ORDER BY s.name");
 
         return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
