@@ -57,7 +57,7 @@ public class EmployeeRepository implements IEmployeeRepository {
         sql.append("FROM employee e ");
 
         if (groupProductionCount) {
-            sql.append("LEFT JOIN production p ON e.id = p.employee_id ");
+            sql.append("INNER JOIN production p ON e.id = p.employee_id ");
         }
 
         sql.append("WHERE 1=1 ");
