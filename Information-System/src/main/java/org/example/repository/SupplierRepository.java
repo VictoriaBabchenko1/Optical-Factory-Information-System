@@ -54,9 +54,9 @@ public class SupplierRepository implements ISupplierRepository {
         List<Object> params = new java.util.ArrayList<>();
 
         if (includeNoProducts) {
-            sql.append("SELECT s.id, s.name, s.contact, s.address FROM supplier s ");
-            sql.append("LEFT JOIN material m ON s.id = m.supplier_id ");
-            sql.append("LEFT JOIN product p ON m.id = p.material_id ");
+            sql.append("SELECT s.id, s.name, s.contact, s.address FROM product p ");
+            sql.append("RIGHT JOIN material m ON p.material_id = m.id ");
+            sql.append("RIGHT JOIN supplier s ON m.supplier_id = s.id ");
             sql.append("WHERE p.id IS NULL");
         } else {
             sql.append("SELECT s.id, s.name, s.contact, s.address FROM supplier s WHERE 1=1");
