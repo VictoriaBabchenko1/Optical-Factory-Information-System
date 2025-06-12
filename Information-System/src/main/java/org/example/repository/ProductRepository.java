@@ -67,7 +67,7 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public List<Map<String, Object>> filterProducts(String name, String categoryId, String materialId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, String sort, boolean uniqueCategories, boolean inOrders, boolean withCategory, boolean maxPrice) {
+    public List<Map<String, Object>> filterProducts(String name, String categoryId, String materialId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, String sort, boolean uniqueCategories, boolean inOrders, boolean withCategory, boolean maxPrice, boolean priceGreaterThanAnyInCategory) {
         StringBuilder sql = new StringBuilder();
         if (uniqueCategories) {
             sql.append("SELECT DISTINCT category_id FROM product WHERE 1=1");
@@ -81,7 +81,7 @@ public class ProductRepository implements IProductRepository {
             sql.append(" AND name ILIKE ?");
             params.add("%" + name + "%");
         }
-        if (categoryId != null && !categoryId.isEmpty()) {
+        if (categoryId != null && !categoryId.isEmpty() && !priceGreaterThanAnyInCategory) {
             sql.append(" AND category_id = ?");
             params.add(Integer.parseInt(categoryId));
         }
@@ -113,6 +113,10 @@ public class ProductRepository implements IProductRepository {
         }
         if (maxPrice) {
             sql.append(" AND price = (SELECT MAX(price) FROM product)");
+        }
+        if (priceGreaterThanAnyInCategory && categoryId != null && !categoryId.isEmpty()) {
+            sql.append(" AND price > ANY (SELECT price FROM product WHERE category_id = ?)");
+            params.add(Integer.parseInt(categoryId));
         }
         if (sort != null && !sort.isEmpty()) {
             sql.append(" ORDER BY ").append(sort);
