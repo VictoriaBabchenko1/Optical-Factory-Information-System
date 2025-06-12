@@ -49,7 +49,8 @@ public class ProductController {
             @RequestParam(value = "withCategory", required = false) String withCategoryParam,
             @RequestParam(value = "maxPrice", required = false) String maxPriceParam,
             @RequestParam(value = "showUniqueMaterials", required = false) String showUniqueMaterialsParam,
-            @RequestParam(value = "priceGreaterThanAnyInCategory", required = false) String priceGreaterThanAnyInCategoryParam
+            @RequestParam(value = "priceGreaterThanAnyInCategory", required = false) String priceGreaterThanAnyInCategoryParam,
+            @RequestParam(value = "minPrice", required = false) String minPriceParam
     ) {
         boolean showAggregates = showAggregatesParam != null;
         boolean uniqueCategories = uniqueCategoriesParam != null;
@@ -58,6 +59,7 @@ public class ProductController {
         boolean maxPrice = maxPriceParam != null;
         boolean showUniqueMaterials = showUniqueMaterialsParam != null;
         boolean priceGreaterThanAnyInCategory = priceGreaterThanAnyInCategoryParam != null && categoryId != null && !categoryId.isEmpty();
+        boolean minPrice = minPriceParam != null;
 
         List<Map<String, Object>> products = null;
         List<String> uniqueMaterials = null;
@@ -66,7 +68,7 @@ public class ProductController {
             uniqueMaterials = productService.getUniqueMaterialNames();
         } else {
             products = productService.filterProducts(
-                name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, sort, uniqueCategories, inOrders, withCategory, maxPrice, priceGreaterThanAnyInCategory
+                name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, sort, uniqueCategories, inOrders, withCategory, maxPrice, minPrice, priceGreaterThanAnyInCategory
             );
         }
 
@@ -93,6 +95,7 @@ public class ProductController {
         param.put("maxPrice", maxPrice ? "on" : "");
         param.put("showUniqueMaterials", showUniqueMaterials ? "on" : "");
         param.put("priceGreaterThanAnyInCategory", priceGreaterThanAnyInCategory ? "on" : "");
+        param.put("minPrice", minPrice ? "on" : "");
         model.addAttribute("param", param);
         model.addAttribute("showAggregates", showAggregates);
         model.addAttribute("showUniqueMaterials", showUniqueMaterials);

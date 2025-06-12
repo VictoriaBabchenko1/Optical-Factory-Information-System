@@ -43,8 +43,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Map<String, Object>> filterProducts(String name, String categoryId, String materialId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, String sort, boolean uniqueCategories, boolean inOrders, boolean withCategory, boolean maxPrice, boolean priceGreaterThanAnyInCategory) {
-        return productRepository.filterProducts(name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, sort, uniqueCategories, inOrders, withCategory, maxPrice, priceGreaterThanAnyInCategory);
+    public List<Map<String, Object>> filterProducts(String name, String categoryId, String materialId, String priceFrom, String priceTo, String qtyFrom, String qtyTo, String sort, boolean uniqueCategories, boolean inOrders, boolean withCategory, boolean maxPrice, boolean minPrice, boolean priceGreaterThanAnyInCategory) {
+        return productRepository.filterProducts(name, categoryId, materialId, priceFrom, priceTo, qtyFrom, qtyTo, sort, uniqueCategories, inOrders, withCategory, maxPrice, minPrice, priceGreaterThanAnyInCategory);
     }
 
     @Override
