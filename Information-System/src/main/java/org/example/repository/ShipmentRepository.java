@@ -53,7 +53,7 @@ public class ShipmentRepository implements IShipmentRepository {
         StringBuilder sql = new StringBuilder();
         List<Object> params = new java.util.ArrayList<>();
         if (groupBy) {
-            sql.append("SELECT s.employee_id, e.name as employee_name, COUNT(s.id) as shipment_count FROM shipment s LEFT JOIN employee e ON s.employee_id = e.id WHERE 1=1");
+            sql.append("SELECT s.employee_id, e.name as employee_name, COUNT(s.id) as shipment_count FROM shipment s INNER JOIN employee e ON s.employee_id = e.id WHERE 1=1");
         } else {
             sql.append("SELECT s.* FROM shipment s WHERE 1=1");
         }
